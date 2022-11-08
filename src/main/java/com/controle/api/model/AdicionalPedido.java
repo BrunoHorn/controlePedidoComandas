@@ -33,9 +33,12 @@ public class AdicionalPedido {
 	@JoinColumn(name="adicional_id")
 	private Adicional adicional;
 	
-	@ManyToOne
-	@JoinColumn(name="pedido_id")
-	private Pedido pedido;
+	//@ManyToOne
+	//@JoinColumn(name="pedido_id")
+	//private Pedido pedido;
+	
+	@Column(name="pedido_id")
+	private Long pedido;
 	
 	@Column(name="observacao")
 	private String observacao;
