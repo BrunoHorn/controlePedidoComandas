@@ -1,6 +1,5 @@
 package com.controle.api.dto;
 
-
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -12,14 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AdicionalPedidoInputDto {
+public class AdicionalPedidoRetornoDto {
 	
-	private Long produtoId;
+    private Long PedidoId;
 	
-	private List<Long> adicionalId;
-
-	private Long pedidoId;
+	private PrudutoAdcPedidoDto produto;
 	
-	private String observacao;
+	private List<AdcPedidoRetornoDto> adicional;
 
 }

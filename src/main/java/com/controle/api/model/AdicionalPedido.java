@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name ="tb_adicional_pedido")
+@Table(name ="adicional_pedido")
 public class AdicionalPedido {
 
 	@Id
@@ -33,13 +33,10 @@ public class AdicionalPedido {
 	@JoinColumn(name="adicional_id")
 	private Adicional adicional;
 	
-	//@ManyToOne
-	//@JoinColumn(name="pedido_id")
-	//private Pedido pedido;
-	
-	@Column(name="pedido_id")
-	private Long pedido;
-	
+	@ManyToOne
+	@JoinColumn(name="pedido_id")
+	private Pedido pedido;
+		
 	@Column(name="observacao")
 	private String observacao;
 

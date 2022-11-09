@@ -1,4 +1,4 @@
-create table  tb_produto (
+create table  produto (
 id bigserial primary key,
 nome_produto varchar(50),
 obs_produto varchar(150),

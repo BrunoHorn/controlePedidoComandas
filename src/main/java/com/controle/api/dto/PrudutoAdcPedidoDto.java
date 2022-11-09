@@ -9,14 +9,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UsuarioInputDto {
+public class PrudutoAdcPedidoDto {
 	
-	private String nome ;
-	
-	private String senha;
-	
-	private String tipoPermissao;
-	
-	private Boolean status;
+	private String nomeProduto;
 
+	private String obeservacaoProduto;
+
+	private Double valorProduto;
+
+	
 }

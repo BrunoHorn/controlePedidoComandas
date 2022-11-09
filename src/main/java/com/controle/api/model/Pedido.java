@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name ="tb_pedido")
+@Table(name ="pedido")
 public class Pedido {
 	
 	@Id
@@ -32,15 +32,18 @@ public class Pedido {
 	
 	@Column(name="data_atualizacao_pedido")
 	private LocalDateTime dataAtualizacao ;
-		
-	@ManyToOne
-	@JoinColumn(name="produto_id")
-	private Produto produto;
 	
 	@ManyToOne
 	@JoinColumn(name="comanda_id")
 	private Comanda comanda;
 	
+	@ManyToOne
+	@JoinColumn(name="produto_id")
+	private Produto produto;
+		
+	/*
+	
+
 	@ManyToOne
 	@JoinColumn(name="usuario_id")
 	private Usuario usuario;
@@ -48,7 +51,7 @@ public class Pedido {
 	@ManyToOne
 	@JoinColumn(name="pagamento_id")
 	private Pagamento pagamento;
-	
+	*/
 
 
 }

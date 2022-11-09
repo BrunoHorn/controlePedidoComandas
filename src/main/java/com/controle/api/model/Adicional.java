@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name ="tb_adicional")
+@Table(name ="adicional")
 public class Adicional {
 	
 	@Id

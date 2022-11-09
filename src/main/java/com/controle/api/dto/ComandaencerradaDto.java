@@ -9,16 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UsuarioDto {
+public class ComandaencerradaDto {
 	
-    private Long id;
-	
-	private String nome ;
-	
-	private String senha;
-	
-	private String tipoPermissao;
-	
-	private Boolean status;
+	private Boolean statusComanda;
 
 }
