@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.controle.api.dto.AdicionalPedidoInputDto;
 import com.controle.api.dto.AdicionalPedidoRetornoDto;
 import com.controle.api.model.AdicionalPedido;
-import com.controle.api.repositorie.AdicionalPedidoRepository;
+import com.controle.api.repository.AdicionalPedidoRepository;
 import com.controle.api.service.AdicionalPedidoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

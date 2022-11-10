@@ -12,8 +12,8 @@ import com.controle.api.dto.PrudutoAdcPedidoDto;
 import com.controle.api.model.AdicionalPedido;
 import com.controle.api.model.Pedido;
 import com.controle.api.model.Produto;
-import com.controle.api.repositorie.AdicionalPedidoRepository;
-import com.controle.api.repositorie.PedidoRepository;
+import com.controle.api.repository.AdicionalPedidoRepository;
+import com.controle.api.repository.PedidoRepository;
 
 @Service
 public class AdicionalPedidoService {

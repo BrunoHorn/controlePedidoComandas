@@ -20,7 +20,7 @@ import com.controle.api.dto.ComandaInputDto;
 import com.controle.api.dto.ComandaencerradaDto;
 import com.controle.api.mapper.ComandaMapper;
 import com.controle.api.model.Comanda;
-import com.controle.api.repositorie.ComandaRepository;
+import com.controle.api.repository.ComandaRepository;
 import com.controle.api.service.ComandaService;
 
 import io.swagger.annotations.Api;
@@ -61,30 +61,10 @@ public class ComandaController {
         return ResponseEntity.status(HttpStatus.OK).body(comandaService.save(comandaInputDto, comandaUpdate.getId()));
     } 
     
-    @PutMapping("/{id}/encerra-comanda")
-    @ApiOperation(value="encerra a comanda pelo id  cadastrado")
-    public ResponseEntity<ComandaDto> updateEncerraComanda(@PathVariable(value = "id")Long id,@RequestBody @Valid ComandaencerradaDto comandaencerradaDto){
-        Comanda comandaUpdate = comandaService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(comandaService.trocaStatusComanda(comandaencerradaDto, comandaUpdate.getId()));
-    }
-    
     @DeleteMapping("/{id}")
     @ApiOperation(value="Deleta comanda pelo id")
 	public void delete(Comanda comanda) {
     	comandaRepository.delete(comanda);		
 	}
-    
-    @GetMapping("/abertas")
-    @ApiOperation(value="Busca Lista comanda abertas")
-    public ResponseEntity<List<ComandaDto>> getListcomandaAbertas(){
-        return ResponseEntity.status(HttpStatus.OK).body(comandaService.comandaAbertas());
-    }
-    
-    @GetMapping("/fechadas")
-    @ApiOperation(value="Busca Lista comanda abertas")
-    public ResponseEntity<List<ComandaDto>> getListcomandaFechadas(){
-        return ResponseEntity.status(HttpStatus.OK).body(comandaService.comandaFinalizada());
-    }
-    
     
 }

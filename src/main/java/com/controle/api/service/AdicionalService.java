@@ -11,7 +11,7 @@ import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
-import com.controle.api.repositorie.AdicionalRepository;
+import com.controle.api.repository.AdicionalRepository;
 
 
 

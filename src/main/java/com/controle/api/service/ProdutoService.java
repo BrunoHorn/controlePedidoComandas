@@ -9,7 +9,7 @@ import com.controle.api.dto.ProdutoDto;
 import com.controle.api.dto.ProdutoInputDto;
 import com.controle.api.mapper.ProdutoMapper;
 import com.controle.api.model.Produto;
-import com.controle.api.repositorie.ProdutoRepository;
+import com.controle.api.repository.ProdutoRepository;
 
 @Service
 public class ProdutoService {

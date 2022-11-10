@@ -11,7 +11,7 @@ import com.controle.api.dto.ComandaInputDto;
 import com.controle.api.dto.ComandaencerradaDto;
 import com.controle.api.mapper.ComandaMapper;
 import com.controle.api.model.Comanda;
-import com.controle.api.repositorie.ComandaRepository;
+import com.controle.api.repository.ComandaRepository;
 
 @Service
 public class ComandaService {

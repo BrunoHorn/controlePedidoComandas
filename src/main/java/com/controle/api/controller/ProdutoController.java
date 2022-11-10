@@ -20,7 +20,7 @@ import com.controle.api.dto.ProdutoDto;
 import com.controle.api.dto.ProdutoInputDto;
 import com.controle.api.mapper.ProdutoMapper;
 import com.controle.api.model.Produto;
-import com.controle.api.repositorie.ProdutoRepository;
+import com.controle.api.repository.ProdutoRepository;
 import com.controle.api.service.ProdutoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
