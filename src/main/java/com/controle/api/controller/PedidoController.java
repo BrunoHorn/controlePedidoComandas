@@ -2,9 +2,7 @@ package com.controle.api.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.controle.api.dto.ComandaDto;
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
-import com.controle.api.dto.ProdutoDto;
-import com.controle.api.dto.ProdutoInputDto;
+import com.controle.api.dto.PedidoretornoStatusDto;
 import com.controle.api.enumerado.StatusPedido;
 import com.controle.api.mapper.PedidoMapper;
-import com.controle.api.model.Comanda;
 import com.controle.api.model.Pedido;
-import com.controle.api.model.Produto;
-import com.controle.api.repository.PedidoRepository;
 import com.controle.api.service.PedidoService;
 
-import io.swagger.annotations.Api;
+
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -44,11 +36,7 @@ public class PedidoController {
 	
 	@Autowired
 	private PedidoMapper pedidoMapper;
-	
-	@Autowired
-	private PedidoRepository pedidoRepository;
-	
-	
+		
 	@PostMapping
 	@ApiOperation(value="Cadastrar novo pedido")
     public ResponseEntity<PedidoDto> savePedido(@RequestBody @Valid PedidoInputDto pedidoInputDto){		
@@ -78,11 +66,12 @@ public class PedidoController {
 	}
 	
 	@GetMapping	    
-	public ResponseEntity<List<Pedido>> getStatusDePedidos(@RequestParam(required = false) StatusPedido statusPedido){
+	public ResponseEntity<List<PedidoretornoStatusDto>> getStatusDePedidos(@RequestParam(required = false) StatusPedido statusPedido){
 		List <Pedido> pedidos = new ArrayList<>();
-		pedidoService.buscaListaStatusPedido(statusPedido);
-	
-		return ResponseEntity.status(HttpStatus.OK).body(pedidos); 
+		List <PedidoretornoStatusDto> pedidosDto = new ArrayList<>();
+		pedidos = pedidoService.buscaListaStatusPedido(statusPedido);
+		pedidosDto = pedidoService.montaRetornoPedidoListDto(pedidos);
+		return ResponseEntity.status(HttpStatus.OK).body(pedidosDto); 
 	}
 
 }

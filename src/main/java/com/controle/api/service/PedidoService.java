@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
-import com.controle.api.dto.ProdutoDto;
+import com.controle.api.dto.PedidoretornoStatusDto;
 import com.controle.api.dto.PrudutoAdcPedidoDto;
 import com.controle.api.enumerado.StatusPedido;
 import com.controle.api.mapper.PedidoMapper;
@@ -91,7 +90,28 @@ public class PedidoService {
     		} else {
     			pedidos =pedidoRepository.buscaListaStatusPedido("TODOS");
     			}
+    
+   	 
     	 return pedidos;
+     }
+     
+     public List<PedidoretornoStatusDto> montaRetornoPedidoListDto(List<Pedido> pedido) {
+    	 List<PedidoretornoStatusDto> pedidoListDto = new ArrayList<>();
+    	 
+    	 for (Pedido pd : pedido) {
+    		 PedidoretornoStatusDto pedidoDto= new PedidoretornoStatusDto();
+    		 pedidoDto.setPedidoId(pd.getId());
+    		 pedidoDto.setPedidoObs(pd.getObservacao());
+    		 pedidoDto.setDataPedido(pd.getDataAtualizacao());
+    		 pedidoDto.setComandaId(pd.getComanda().getId());
+    		 pedidoDto.setComandaObs(pd.getComanda().getObeservacao());
+    		 pedidoDto.setProdutoId(pd.getProduto().getId());
+    		 pedidoDto.setProdutoNome(pd.getProduto().getNome());
+    		 
+    		 pedidoListDto.add(pedidoDto);
+    	 }
+    	 return pedidoListDto;
+    	 
      }
 	
 
