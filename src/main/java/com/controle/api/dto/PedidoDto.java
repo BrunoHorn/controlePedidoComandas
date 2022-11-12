@@ -24,7 +24,7 @@ public class PedidoDto {
 	
 	private LocalDateTime dataAtualizacao ;
 	
-	private Long comanda;
+	private Long comandaId;
 	
 	private PrudutoAdcPedidoDto produto;
 

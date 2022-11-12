@@ -1,5 +1,7 @@
 package com.controle.api.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class AdicionalPedidoController {
 	
 	@PostMapping
 	@ApiOperation(value="Cadastrar novo adicional em um pedido ")
-    public ResponseEntity<AdicionalPedidoRetornoDto> saveAdcProduto(@RequestBody @Valid AdicionalPedidoInputDto adicionalPedidoInputDto){		
+    public ResponseEntity<List<AdicionalPedidoRetornoDto>> saveAdcProduto(@RequestBody @Valid AdicionalPedidoInputDto adicionalPedidoInputDto){		
         return ResponseEntity.status(HttpStatus.CREATED).body(adicionalPedidoService.save(adicionalPedidoInputDto, null));
     }
 

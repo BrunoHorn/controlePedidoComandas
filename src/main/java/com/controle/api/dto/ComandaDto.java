@@ -12,9 +12,7 @@ import lombok.Setter;
 public class ComandaDto {
 	
     private Long id;
-	
-	private String obeservacao; 
-	
+		
 	private Boolean statusComanda;
 
 }

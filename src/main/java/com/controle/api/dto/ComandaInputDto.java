@@ -10,9 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ComandaInputDto {
-	  	
-	private String obeservacao; 
-	
+	  		
 	private Boolean statusComanda;
 
 }

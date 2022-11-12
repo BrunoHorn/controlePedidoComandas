@@ -9,10 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AdcPedidoRetornoDto {
+public class ProdutoretornoPedidoDto {
+
+	private Long id;
 	
 	private String nome;
-	
-	//private Double valor;
-
 }

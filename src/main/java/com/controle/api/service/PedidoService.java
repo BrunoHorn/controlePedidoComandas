@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
 import com.controle.api.dto.PedidoretornoStatusDto;
+import com.controle.api.dto.ProdutoretornoPedidoDto;
 import com.controle.api.dto.PrudutoAdcPedidoDto;
 import com.controle.api.enumerado.StatusPedido;
 import com.controle.api.mapper.PedidoMapper;
@@ -40,8 +41,9 @@ public class PedidoService {
 	
 	public PedidoDto save(@Valid PedidoInputDto pedidoInputDto, Long id) {
 		var pedido = pedidoMapper.toPedido(pedidoInputDto); 
-		var produto = produtoRepository.findById(pedidoInputDto.getProduto());        	
-		var comanda = comandaRepository.findById(pedidoInputDto.getComanda());
+		var produto = produtoRepository.findById(pedidoInputDto.getProdutoId());        	
+		var comanda = comandaRepository.findById(pedidoInputDto.getComandaId());
+		
 		if (Objects.nonNull(id)) {
         	pedido.setId(id);
         }	
@@ -61,10 +63,10 @@ public class PedidoService {
 		pedidoDto.setObservacao(pedido.getObservacao());
 		pedidoDto.setStatus(pedido.getStatus());
 		pedidoDto.setDataAtualizacao(pedido.getDataAtualizacao());
-		pedidoDto.setComanda(comanda.getId());
-		prudutoAdcPedidoDto.setNomeProduto(produto.getNome());
-		prudutoAdcPedidoDto.setObeservacaoProduto(produto.getObeservacao());
-		prudutoAdcPedidoDto.setValorProduto(produto.getValor());
+		pedidoDto.setComandaId(comanda.getId());
+		prudutoAdcPedidoDto.setNome(produto.getNome());
+		prudutoAdcPedidoDto.setObeservacao(produto.getObeservacao());
+		prudutoAdcPedidoDto.setValor(produto.getValor());
 		pedidoDto.setProduto(prudutoAdcPedidoDto);
 		
 		return pedidoDto;
@@ -100,13 +102,17 @@ public class PedidoService {
     	 
     	 for (Pedido pd : pedido) {
     		 PedidoretornoStatusDto pedidoDto= new PedidoretornoStatusDto();
+    		 ProdutoretornoPedidoDto pdtRetornopdd = new ProdutoretornoPedidoDto();
+    		 
     		 pedidoDto.setPedidoId(pd.getId());
-    		 pedidoDto.setPedidoObs(pd.getObservacao());
+    		 pedidoDto.setObservacao(pd.getObservacao());
     		 pedidoDto.setDataPedido(pd.getDataAtualizacao());
     		 pedidoDto.setComandaId(pd.getComanda().getId());
-    		 pedidoDto.setComandaObs(pd.getComanda().getObeservacao());
-    		 pedidoDto.setProdutoId(pd.getProduto().getId());
-    		 pedidoDto.setProdutoNome(pd.getProduto().getNome());
+    		 
+    		 pdtRetornopdd.setId(pd.getProduto().getId());
+    		 pdtRetornopdd.setNome(pd.getProduto().getNome());
+    		
+    		 pedidoDto.setProduto(pdtRetornopdd);
     		 
     		 pedidoListDto.add(pedidoDto);
     	 }

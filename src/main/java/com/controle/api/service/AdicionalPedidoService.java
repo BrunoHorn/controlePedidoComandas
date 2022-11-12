@@ -30,9 +30,11 @@ public class AdicionalPedidoService {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	
-	public AdicionalPedidoRetornoDto save(@Valid AdicionalPedidoInputDto AdcPedidoInputDto, Long id) {		
+	public List<AdicionalPedidoRetornoDto> save(@Valid AdicionalPedidoInputDto AdcPedidoInputDto, Long id) {		
 		var produto = produtoService.findById(AdcPedidoInputDto.getProdutoId());
      	var pedido = pedidoRepository.findById(AdcPedidoInputDto.getPedidoId());        	
+     	
+     	List<AdicionalPedido> adicionalPedidoList = new ArrayList<>();	
      	List<Long> ids= AdcPedidoInputDto.getAdicionalId();
 		for (Long adcId :ids){
 			var adicionalPedido = new AdicionalPedido();
@@ -42,33 +44,30 @@ public class AdicionalPedidoService {
 			adicionalPedido.setPedido(pedido.get());
 			adicionalPedido.setObservacao(AdcPedidoInputDto.getObservacao());
 			
-			 AdcPedidoRepository.save(adicionalPedido);
+			adicionalPedidoList.add(AdcPedidoRepository.save(adicionalPedido));
 		}
-		var adcPedidoRetornoDto =new AdicionalPedidoRetornoDto() ; 		       		
-				adcPedidoRetornoDto  = MontaDtoadcPedidoRetorno(ids,produto,pedido.get());	
+		List<AdicionalPedidoRetornoDto> adcPedidoRetornoDto =new ArrayList<>(); 		       		
+				
+				adcPedidoRetornoDto  = MontaDtoadcPedidoRetorno(adicionalPedidoList,produto,pedido.get());	
 	return adcPedidoRetornoDto;
 	}
 	
-	private AdicionalPedidoRetornoDto MontaDtoadcPedidoRetorno(List<Long> adcPedidoInputDto,Produto produto,Pedido pedido) {
-		var adcPedidoRetornoDto =new AdicionalPedidoRetornoDto();
-		var prudutoAdcPedidoDto =  new PrudutoAdcPedidoDto();
-		adcPedidoRetornoDto.setPedidoId(pedido.getId());
+	private List<AdicionalPedidoRetornoDto> MontaDtoadcPedidoRetorno(List<AdicionalPedido> adicionalPedidoList,Produto produto,Pedido pedido) {
+		List<AdicionalPedidoRetornoDto> AdicionalPedidoRetornoListDto= new ArrayList<>();	
 		
-		prudutoAdcPedidoDto.setNomeProduto(produto.getNome());
-		prudutoAdcPedidoDto.setValorProduto(produto.getValor());
-		prudutoAdcPedidoDto.setObeservacaoProduto(produto.getObeservacao());  
-		adcPedidoRetornoDto.setProduto(prudutoAdcPedidoDto);
-		List<AdcPedidoRetornoDto> adcPedidoRetornoListDto = new ArrayList<>();	
-		List<Long> ids= adcPedidoInputDto;
-		for (Long adcId :ids) {
-			var adcRetornoDto = new AdcPedidoRetornoDto();
-			var adicional =adicionalService.findById(adcId);
-			adcRetornoDto.setNomeAdicional(adicional.getNome());
-			adcRetornoDto.setPreçoadicional(adicional.getValor());			
-			adcPedidoRetornoListDto.add(adcRetornoDto);
+		for(AdicionalPedido adicionalPedido:adicionalPedidoList ) {
+			var adicionalPedidoRetornoDto =new AdicionalPedidoRetornoDto();				
+			adicionalPedidoRetornoDto.setId(adicionalPedido.getId());
+			 
+			var AdcPedidoRetornoDto = new AdcPedidoRetornoDto();			
+			AdcPedidoRetornoDto.setNome(adicionalPedido.getAdicional().getNome());
+			adicionalPedidoRetornoDto.setAdicional(AdcPedidoRetornoDto);			 
+			adicionalPedidoRetornoDto.setProdutoId(produto.getId());
+		
+			AdicionalPedidoRetornoListDto.add(adicionalPedidoRetornoDto);
 		}
-		adcPedidoRetornoDto.setAdicional(adcPedidoRetornoListDto);
-		return adcPedidoRetornoDto;
+		
+		return AdicionalPedidoRetornoListDto;
 	}
 
 }

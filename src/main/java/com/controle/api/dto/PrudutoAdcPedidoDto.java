@@ -11,11 +11,11 @@ import lombok.Setter;
 @Setter
 public class PrudutoAdcPedidoDto {
 	
-	private String nomeProduto;
+	private String nome;
 
-	private String obeservacaoProduto;
+	private String obeservacao;
 
-	private Double valorProduto;
+	private Double valor;
 
 	
 }

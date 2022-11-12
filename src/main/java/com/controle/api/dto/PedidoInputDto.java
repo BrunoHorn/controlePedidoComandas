@@ -16,7 +16,7 @@ public class PedidoInputDto {
 	
 	private StatusPedido status;
 		
-	private Long comanda;
+	private Long comandaId;
 	
-	private Long produto;
+	private Long produtoId;
 }

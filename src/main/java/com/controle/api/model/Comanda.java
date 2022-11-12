@@ -23,9 +23,7 @@ public class Comanda {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	
-	private String obeservacao; 
-	
+		
 	@Column(name="status_comanda")
 	private Boolean statusComanda;
 

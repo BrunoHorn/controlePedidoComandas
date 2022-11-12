@@ -15,16 +15,14 @@ public class PedidoretornoStatusDto {
 
 	private Long pedidoId;
 	
-	private String pedidoObs;
+	private String observacao;
 	
 	private LocalDateTime dataPedido;
 	
 	private Long comandaId;
+		
+	private ProdutoretornoPedidoDto produto;
 	
-	private String comandaObs;
-	
-	private Long produtoId;
-	
-	private String produtoNome;
+
 	
 }
