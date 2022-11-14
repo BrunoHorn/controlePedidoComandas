@@ -1,5 +1,6 @@
 package com.controle.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.controle.api.dto.ProdutoDto;
 import com.controle.api.dto.ProdutoInputDto;
@@ -48,8 +50,11 @@ public class ProdutoController {
 	
     @GetMapping
     @ApiOperation(value="Busca lista de produtos cadastrados")
-    public ResponseEntity<List<ProdutoDto>> getListProdutos(){
-        return ResponseEntity.status(HttpStatus.OK).body(produtoService.findAll());
+    public ResponseEntity<List<ProdutoDto>> getListProdutos(@RequestParam(required = false) Boolean status){
+    	   List<Produto> produtos= new ArrayList<>();
+    	   produtos = produtoService.buscaListaProduto(status);
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(produtoMapper.toProdutoListDto(produtos));
     }
     
     @GetMapping("/{id}")

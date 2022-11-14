@@ -1,5 +1,6 @@
 package com.controle.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -42,6 +43,18 @@ public class ProdutoService {
 		}
 		return produtoOptional.get();
 	}
+
+	public List<Produto> buscaListaProduto(Boolean status) {
+   	 List <Produto> produtos = new ArrayList<>();	
+   	 if (status == null ) {
+   		 status= true;
+   		produtos = produtoRepository.buscaListaPdt(status);
+   	 } else  {
+   		produtos = produtoRepository.buscaListaPdt(status);
+   	 } 	
+   	return produtos;
+   }
+	
 	
 	
 	

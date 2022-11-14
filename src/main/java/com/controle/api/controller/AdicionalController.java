@@ -1,5 +1,6 @@
 package com.controle.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
@@ -47,8 +49,11 @@ public class AdicionalController {
 	
     @GetMapping
     @ApiOperation(value="Busca lista de adicionais cadastrados")
-    public ResponseEntity<List<AdicionalDto>> getListAdicionais(){
-        return ResponseEntity.status(HttpStatus.OK).body(adicionalService.findAll());
+    public ResponseEntity<List<AdicionalDto>> getListAdicionais(@RequestParam(required = false) Boolean status){
+        List<Adicional> adicionais= new ArrayList<>();
+        adicionais = adicionalService.buscaListaAdicional(status);        
+        return ResponseEntity.status(HttpStatus.OK).body(adicionalMapper.toAdicionalListDto(adicionais));
+                
     }
     
     @GetMapping("/{id}")

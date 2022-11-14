@@ -50,7 +50,7 @@ public class ComandaService {
 			throw new RuntimeException("Não a Comanda cadastrada com esse ID");
 		}
 		var comanda = comandaOptional.get();
-			comanda.setStatusComanda(comandaencerradaDto.getStatusComanda());
+			comanda.setStatus(comandaencerradaDto.getStatusComanda());
 			comandaRepository.save(comanda);
 			var comandaDto = comandaMapper.toComandaDto(comanda);
 		return comandaDto;
@@ -60,7 +60,7 @@ public class ComandaService {
 		 List<Comanda> comanda = comandaRepository.findAll();
 		 List<Comanda> comandaFinalizada = new ArrayList<>();
 		 for (Comanda cm : comanda) {
-			 if (!cm.getStatusComanda()) {
+			 if (!cm.getStatus()) {
 				 comandaFinalizada.add(cm);
 			 }
 		 }		 
@@ -71,11 +71,24 @@ public class ComandaService {
 		 List<Comanda> comanda = comandaRepository.findAll();
 		 List<Comanda> comandaFinalizada = new ArrayList<>();
 		 for (Comanda cm : comanda) {
-			 if (cm.getStatusComanda()) {
+			 if (cm.getStatus()) {
 				 comandaFinalizada.add(cm);
 			 }
 		 }		 
 		 return comandaMapper.toComandaListDto(comandaFinalizada);
+	}
+
+
+
+	public List<Comanda> buscaListaComanda(Boolean status) {
+	   	 List <Comanda> comandas = new ArrayList<>();	
+	   	 if (status == null ) {
+	   		 status= true;
+	   		comandas = comandaRepository.buscaListaCmd(status);
+	   	 } else  {
+	   		comandas = comandaRepository.buscaListaCmd(status);
+	   	 } 	
+	   	return comandas;
 	}
 
 

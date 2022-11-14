@@ -1,5 +1,6 @@
 package com.controle.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.controle.api.dto.ComandaDto;
 import com.controle.api.dto.ComandaInputDto;
-import com.controle.api.dto.ComandaencerradaDto;
 import com.controle.api.mapper.ComandaMapper;
 import com.controle.api.model.Comanda;
 import com.controle.api.repository.ComandaRepository;
@@ -67,4 +68,12 @@ public class ComandaController {
     	comandaRepository.delete(comanda);		
 	}
     
+    
+    @GetMapping
+    public ResponseEntity<List<ComandaDto>> getListProdutos(@RequestParam(required = false) Boolean status){
+    	   List<Comanda> comandas= new ArrayList<>();
+    	   comandas = comandaService.buscaListaComanda(status);
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(comandaMapper.toComandaListDto(comandas));
+    }
 }

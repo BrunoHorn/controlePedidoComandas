@@ -44,6 +44,13 @@ public class PedidoService {
 		var produto = produtoRepository.findById(pedidoInputDto.getProdutoId());        	
 		var comanda = comandaRepository.findById(pedidoInputDto.getComandaId());
 		
+		if(!produto.get().getStatus()) {
+			throw new RuntimeException("Produto :"+ produto.get().getNome()+ "  está indisponivel!");
+		}
+		if(!comanda.get().getStatus()) {
+			throw new RuntimeException("comanda está indisponivel!");
+		}
+				
 		if (Objects.nonNull(id)) {
         	pedido.setId(id);
         }	
@@ -121,5 +128,6 @@ public class PedidoService {
      }
 	
 
+     
 
 }

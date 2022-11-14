@@ -1,8 +1,8 @@
 package com.controle.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,6 @@ import com.controle.api.dto.AdicionalInputDto;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
 import com.controle.api.repository.AdicionalRepository;
-
-
 
 @Service
 public class AdicionalService {
@@ -52,6 +50,23 @@ public class AdicionalService {
     	adicionalRepository.delete(adicional);
 		
 	}
+       
+    public List<Adicional> buscaListaAdicional(Boolean status){
+    	 List <Adicional> adicionais = new ArrayList<>();	
+    	 if (status == null ) {
+    		 status= true;
+    		 adicionais = adicionalRepository.buscaListaAdc(status);
+    	 } else  {
+    		 adicionais = adicionalRepository.buscaListaAdc(status);
+    	 }
+    	
+    	return adicionais;
+    }
+    
+    
+    
+    
+  
 		
 
 }

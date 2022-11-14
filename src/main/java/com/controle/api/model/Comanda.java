@@ -25,6 +25,6 @@ public class Comanda {
     private Long id;
 		
 	@Column(name="status_comanda")
-	private Boolean statusComanda;
+	private Boolean status;
 
 }
