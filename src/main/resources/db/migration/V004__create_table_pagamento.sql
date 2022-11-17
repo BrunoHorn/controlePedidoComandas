@@ -3,7 +3,7 @@ create table pagamento (
 	taxa_acrescimo numeric(1000,2),
 	taxa_desconto numeric(1000,2),
 	valor_total numeric(1000,2),
-	status_pagamento boolean 
+	status boolean 
 	
 	
 	);

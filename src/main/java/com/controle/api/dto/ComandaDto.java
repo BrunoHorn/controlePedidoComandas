@@ -13,6 +13,6 @@ public class ComandaDto {
 	
     private Long id;
 		
-	private Boolean statusComanda;
+	private Boolean status;
 
 }

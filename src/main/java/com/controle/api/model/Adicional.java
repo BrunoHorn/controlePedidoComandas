@@ -24,13 +24,13 @@ public class Adicional {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	@Column(name="nome_adicional")
+	@Column(name="nome")
 	private String nome;
 	
-	@Column(name="valor_adicional")
+	@Column(name="valor")
 	private Double valor;
 	
-	@Column(name="status_adicional")
+	@Column(name="status")
 	private Boolean status;
 
 }

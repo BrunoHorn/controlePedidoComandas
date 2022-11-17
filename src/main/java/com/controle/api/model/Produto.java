@@ -24,19 +24,19 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	@Column(name="nome_produto")
+	@Column(name="nome")
 	private String nome;
 	
-	@Column(name="obs_produto")
+	@Column(name="observacao")
 	private String obeservacao;
 	
-	@Column(name="tipo_produto")
+	@Column(name="tipo") //ENUMARADO
 	private String tipo;
 	
-	@Column(name="valor_produto")
+	@Column(name="valor")
 	private Double valor;
 	
-	@Column(name="status_produto")
+	@Column(name="status")
 	private Boolean status;
 
 }

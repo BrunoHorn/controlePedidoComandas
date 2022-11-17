@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 public class ComandaInputDto {
 	  		
-	private Boolean statusComanda;
+	private Boolean status;
 
 }

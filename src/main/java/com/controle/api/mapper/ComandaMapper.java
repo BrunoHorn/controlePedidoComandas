@@ -32,7 +32,7 @@ public class ComandaMapper {
 		for (Comanda cm : comanda) {
 			var comandaDto = new ComandaDto();
 			comandaDto.setId(cm.getId());
-			comandaDto.setStatusComanda(cm.getStatus());
+			comandaDto.setStatus(cm.getStatus());
 			
 			ComandaListDto.add(comandaDto);
 			

@@ -6,6 +6,9 @@ import java.util.Objects;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
@@ -31,11 +34,16 @@ public class AdicionalService {
 		adicional = adicionalRepository.save(adicional);		
 		AdicionalDto adicionalDto = adicionalMapper.toAdicionalDto(adicional);		
 	return adicionalDto;
+	} 
+
+	public Page<AdicionalDto> findAll(Pageable pageable) {		
+		 Page<Adicional> adicionais = adicionalRepository.findAll(pageable);
+		
+		Page<AdicionalDto> adicionaisDto = adicionais.map(teste -> adicionalMapper.toAdicionalDto(teste));
+		  
+		  return adicionaisDto;
 	}
 
-	public List<AdicionalDto> findAll() {		
-		return adicionalMapper.toAdicionalListDto(adicionalRepository.findAll());
-	}
 
 	public Adicional findById(Long id) {
 		var adicionalOptional = adicionalRepository.findById(id);
@@ -51,16 +59,14 @@ public class AdicionalService {
 		
 	}
        
-    public List<Adicional> buscaListaAdicional(Boolean status){
-    	 List <Adicional> adicionais = new ArrayList<>();	
-    	 if (status == null ) {
-    		 status= true;
-    		 adicionais = adicionalRepository.buscaListaAdc(status);
-    	 } else  {
-    		 adicionais = adicionalRepository.buscaListaAdc(status);
-    	 }
-    	
-    	return adicionais;
+    public Page<AdicionalDto> buscaListaAdicional(Boolean status, Pageable pageable){
+    	 if (status == null) {
+    		 status= true;    		
+    	 } 
+   
+    	 Page<Adicional> page = adicionalRepository.findByStatus(status, pageable);
+    	 Page<AdicionalDto> adicionaisDto = page.map(pagedto -> adicionalMapper.toAdicionalDto(pagedto));
+    	 return adicionaisDto;
     }
     
     

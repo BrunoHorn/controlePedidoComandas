@@ -34,11 +34,11 @@ public class Pedido {
 	
 	private String observacao ;
 	
-	@Column(name="status_pedido")
+	@Column(name="status")
 	@Enumerated(EnumType.STRING)
 	private StatusPedido status;
 	
-	@Column(name="data_atualizacao_pedido")
+	@Column(name="data_atualizacao")
 	private LocalDateTime dataAtualizacao ;
 	
 	@ManyToOne

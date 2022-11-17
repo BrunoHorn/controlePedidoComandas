@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.controle.api.dto.AdicionalDto;
@@ -27,7 +28,7 @@ public class AdicionalMapper {
 		 return adicionalDto;
 	}
 	
-	public List<AdicionalDto> toAdicionalListDto(List<Adicional> adicional) {
+	public List<AdicionalDto> toAdicionalListDto(Page<Adicional> adicional) {
 		List<AdicionalDto> adicionalListDto = new ArrayList<>();		
 		for (Adicional ad : adicional) {
 			var adicionalDto = new AdicionalDto();
