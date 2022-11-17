@@ -3,9 +3,14 @@ package com.controle.api.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.controle.api.dto.ComandaDto;
 import com.controle.api.dto.ComandaInputDto;
 import com.controle.api.dto.ComandaencerradaDto;
@@ -77,19 +82,20 @@ public class ComandaService {
 		 }		 
 		 return comandaMapper.toComandaListDto(comandaFinalizada);
 	}
+	
+    public Page<ComandaDto> buscaListaComanda(Boolean status, Pageable pageable){
+    	if (status == null) {
+    		status= true;    		
+   	 	} 
+  
+   	 	Page<Comanda> page = comandaRepository.findByStatus(status, pageable);
+   	 	Page<ComandaDto> comandasDto = page.map(pagedto -> comandaMapper.toComandaDto(pagedto));
+   	 	return comandasDto;
+   }
 
 
 
-	public List<Comanda> buscaListaComanda(Boolean status) {
-	   	 List <Comanda> comandas = new ArrayList<>();	
-	   	 if (status == null ) {
-	   		 status= true;
-	   		comandas = comandaRepository.buscaListaCmd(status);
-	   	 } else  {
-	   		comandas = comandaRepository.buscaListaCmd(status);
-	   	 } 	
-	   	return comandas;
-	}
+
 
 
 	

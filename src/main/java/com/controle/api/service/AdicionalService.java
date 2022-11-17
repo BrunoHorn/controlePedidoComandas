@@ -1,17 +1,19 @@
 package com.controle.api.service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
+import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
 import com.controle.api.repository.AdicionalRepository;
@@ -54,9 +56,12 @@ public class AdicionalService {
 	}
 	
     @Transactional
-	public void delete(Adicional adicional) {
-    	adicionalRepository.delete(adicional);
-		
+	public void excluir(Adicional adicional) {
+    	try {
+    		adicionalRepository.deleteById(adicional.getId());
+    	} catch (DataIntegrityViolationException  e) {
+    		throw new EntidadeEmUsoException("Não a adicionais cadastrados com esse ID");
+		} 
 	}
        
     public Page<AdicionalDto> buscaListaAdicional(Boolean status, Pageable pageable){

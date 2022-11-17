@@ -6,8 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
 import com.controle.api.dto.PedidoretornoStatusDto;
@@ -92,17 +96,7 @@ public class PedidoService {
      	pedidoRepository.save(pedido);
      }
 	
-     public List<Pedido> buscaListaStatusPedido(StatusPedido statusPedido){
-    	 List <Pedido> pedidos = new ArrayList<>();	
-    	 if (statusPedido != null){
-    			pedidos= pedidoRepository.buscaListaStatusPedido(statusPedido.toString());
-    		} else {
-    			pedidos =pedidoRepository.buscaListaStatusPedido("TODOS");
-    			}
-    
-   	 
-    	 return pedidos;
-     }
+
      
      public List<PedidoretornoStatusDto> montaRetornoPedidoListDto(List<Pedido> pedido) {
     	 List<PedidoretornoStatusDto> pedidoListDto = new ArrayList<>();
@@ -126,6 +120,14 @@ public class PedidoService {
     	 return pedidoListDto;
     	 
      }
+
+	public Page<PedidoDto> buscaListaPedido(StatusPedido status, Pageable pageable) {
+	 Page<Pedido> page = pedidoRepository.findByStatus(status, pageable);
+	 Page<PedidoDto> pedidosDto = page.map(pagedto -> pedidoMapper.toPedidoDto(pagedto));
+	 return pedidosDto;
+	}
+
+
 	
 
      

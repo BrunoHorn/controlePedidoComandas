@@ -1,11 +1,12 @@
 package com.controle.api.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.controle.api.dto.ProdutoDto;
 import com.controle.api.dto.ProdutoInputDto;
 import com.controle.api.mapper.ProdutoMapper;
 import com.controle.api.model.Produto;
 import com.controle.api.repository.ProdutoRepository;
 import com.controle.api.service.ProdutoService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -47,16 +50,16 @@ public class ProdutoController {
     public ResponseEntity<ProdutoDto> saveProduto(@RequestBody @Valid ProdutoInputDto produtoInputDto){		
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.save(produtoInputDto, null));
     }
-	
+   
     @GetMapping
-    @ApiOperation(value="Busca lista de produtos cadastrados")
-    public ResponseEntity<List<ProdutoDto>> getListProdutos(@RequestParam(required = false) Boolean status){
-    	   List<Produto> produtos= new ArrayList<>();
-    	   produtos = produtoService.buscaListaProduto(status);
-    	
-    	return ResponseEntity.status(HttpStatus.OK).body(produtoMapper.toProdutoListDto(produtos));
+    public ResponseEntity<Page<ProdutoDto>> getListProduto(@RequestParam(required = false) Boolean status,
+    		@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC)Pageable pageable	){
+        
+        Page<ProdutoDto> listaProdutoDto = produtoService.buscaListaproduto(status, pageable);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(listaProdutoDto);               
     }
-    
+       
     @GetMapping("/{id}")
     @ApiOperation(value="Busca produto cadastrado pelo ID")
     public ResponseEntity<ProdutoDto> getProdutoId(@PathVariable(value = "id") Long id){

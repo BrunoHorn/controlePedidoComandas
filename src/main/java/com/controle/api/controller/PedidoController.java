@@ -1,9 +1,12 @@
 package com.controle.api.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,14 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
-import com.controle.api.dto.PedidoretornoStatusDto;
 import com.controle.api.enumerado.StatusPedido;
 import com.controle.api.mapper.PedidoMapper;
 import com.controle.api.model.Pedido;
 import com.controle.api.service.PedidoService;
-
 
 import io.swagger.annotations.ApiOperation;
 
@@ -66,12 +68,15 @@ public class PedidoController {
 	}
 	
 	@GetMapping	    
-	public ResponseEntity<List<PedidoretornoStatusDto>> getStatusDePedidos(@RequestParam(required = false) StatusPedido statusPedido){
-		List <Pedido> pedidos = new ArrayList<>();
-		List <PedidoretornoStatusDto> pedidosDto = new ArrayList<>();
-		pedidos = pedidoService.buscaListaStatusPedido(statusPedido);
-		pedidosDto = pedidoService.montaRetornoPedidoListDto(pedidos);
-		return ResponseEntity.status(HttpStatus.OK).body(pedidosDto); 
+	public ResponseEntity<Page<PedidoDto>> getStatusDePedidos(@RequestParam(required = false) StatusPedido status,
+    		@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
+	
+		
+        Page<PedidoDto> listaPedidoDto = pedidoService.buscaListaPedido(status, pageable);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(listaPedidoDto);
+		
+
 	}
 
 }

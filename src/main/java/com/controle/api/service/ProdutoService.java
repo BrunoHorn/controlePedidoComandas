@@ -1,11 +1,15 @@
 package com.controle.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import com.controle.api.dto.ProdutoDto;
 import com.controle.api.dto.ProdutoInputDto;
 import com.controle.api.mapper.ProdutoMapper;
@@ -44,16 +48,14 @@ public class ProdutoService {
 		return produtoOptional.get();
 	}
 
-	public List<Produto> buscaListaProduto(Boolean status) {
-   	 List <Produto> produtos = new ArrayList<>();	
-   	 if (status == null ) {
-   		 status= true;
-   		produtos = produtoRepository.buscaListaPdt(status);
-   	 } else  {
-   		produtos = produtoRepository.buscaListaPdt(status);
-   	 } 	
-   	return produtos;
-   }
+	public Page<ProdutoDto> buscaListaproduto(Boolean status, Pageable pageable) {
+		if (status == null) {
+			status= true;    		
+		} 
+		Page<Produto> page = produtoRepository.findByStatus(status, pageable);
+		Page<ProdutoDto> produtoDto = page.map(pagedto -> produtoMapper.toProdutoDto(pagedto));
+		return produtoDto;
+	}
 	
 	
 	
