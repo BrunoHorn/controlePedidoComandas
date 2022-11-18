@@ -3,6 +3,7 @@ package com.controle.api.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -10,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
 import com.controle.api.enumerado.StatusPedido;
+import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.mapper.PedidoMapper;
 import com.controle.api.model.Pedido;
 import com.controle.api.service.PedidoService;
@@ -70,13 +73,21 @@ public class PedidoController {
 	@GetMapping	    
 	public ResponseEntity<Page<PedidoDto>> getStatusDePedidos(@RequestParam(required = false) StatusPedido status,
     		@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
-	
-		
+			
         Page<PedidoDto> listaPedidoDto = pedidoService.buscaListaPedido(status, pageable);
-        
+       
         return ResponseEntity.status(HttpStatus.OK).body(listaPedidoDto);
-		
-
 	}
+	
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PedidoDto> deleta(@PathVariable(value = "id") Long id){
+    		Pedido pedido =pedidoService.findById(id);  		
+    		try {
+    			pedidoService.excluir(pedido);
+    			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		
+    		} catch(DataIntegrityViolationException e){
+    			throw new EntidadeEmUsoException("Pedido está em uso , só pode ser desativado");
+    		}    		
+    }
 
 }

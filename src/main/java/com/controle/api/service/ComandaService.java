@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,6 @@ public class ComandaService {
 		var comandaDto = comandaMapper.toComandaDto(comanda);
 		return comandaDto ;
 	}
-
-
 
 	public Comanda findById(Long id) {
 		var comandaOptional = comandaRepository.findById(id);
@@ -92,6 +91,11 @@ public class ComandaService {
    	 	Page<ComandaDto> comandasDto = page.map(pagedto -> comandaMapper.toComandaDto(pagedto));
    	 	return comandasDto;
    }
+    @Transactional
+    
+	public void excluir(Comanda comanda) {
+    	comandaRepository.delete(comanda);
+	}
 
 
 

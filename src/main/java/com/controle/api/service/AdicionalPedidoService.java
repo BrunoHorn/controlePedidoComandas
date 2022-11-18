@@ -18,7 +18,7 @@ import com.controle.api.repository.PedidoRepository;
 public class AdicionalPedidoService {
 
 	@Autowired
-	private AdicionalPedidoRepository AdcPedidoRepository;
+	private AdicionalPedidoRepository adicionalPedidoRepository;
 		
 	@Autowired
 	private ProdutoService  produtoService;
@@ -52,7 +52,7 @@ public class AdicionalPedidoService {
 			adicionalPedido.setPedido(pedido.get());
 			adicionalPedido.setObservacao(AdcPedidoInputDto.getObservacao());
 			
-			adicionalPedidoList.add(AdcPedidoRepository.save(adicionalPedido));
+			adicionalPedidoList.add(adicionalPedidoRepository.save(adicionalPedido));
 		}
 		List<AdicionalPedidoRetornoDto> adcPedidoRetornoDto =new ArrayList<>(); 		       		
 				
@@ -76,6 +76,19 @@ public class AdicionalPedidoService {
 		}
 		
 		return AdicionalPedidoRetornoListDto;
+	}
+
+	public AdicionalPedido findById(Long id) {
+		var adicionalPedidoOptional = adicionalPedidoRepository.findById(id);
+		if(adicionalPedidoOptional.isEmpty()) {
+			throw new RuntimeException("Não a adicionaisPedidos cadastrados com esse ID");
+		}
+		return adicionalPedidoOptional.get();
+	}
+
+	public void excluir(AdicionalPedido adicionalPedido) {
+		adicionalPedidoRepository.delete(adicionalPedido); 
+		
 	}
 
 }

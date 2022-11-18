@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
 	            new ExceptionDto(HttpStatus.NOT_FOUND, e.getMessage())
 	        );
 	    }
+	   
 	   @ExceptionHandler(EntidadeEmUsoException.class)
 	    public ResponseEntity<ExceptionDto> EntidadeEmUsoException(EntidadeEmUsoException e){
 
@@ -24,6 +25,7 @@ public class GlobalExceptionHandler {
 	            new ExceptionDto(HttpStatus.CONFLICT, e.getMessage())
 	        );
 	    }
+
 	   
 
 

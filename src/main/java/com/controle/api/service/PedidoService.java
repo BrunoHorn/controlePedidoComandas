@@ -127,6 +127,11 @@ public class PedidoService {
 	 return pedidosDto;
 	}
 
+	public void excluir(Pedido pedido) {
+	 	pedidoRepository.delete(pedido);
+		
+	}
+
 
 	
 

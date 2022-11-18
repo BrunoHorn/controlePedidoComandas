@@ -6,14 +6,12 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
-import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
 import com.controle.api.repository.AdicionalRepository;
@@ -57,18 +55,14 @@ public class AdicionalService {
 	
     @Transactional
 	public void excluir(Adicional adicional) {
-    	try {
-    		adicionalRepository.deleteById(adicional.getId());
-    	} catch (DataIntegrityViolationException  e) {
-    		throw new EntidadeEmUsoException("Não a adicionais cadastrados com esse ID");
-		} 
-	}
+    	adicionalRepository.delete(adicional); 
+    }
        
     public Page<AdicionalDto> buscaListaAdicional(Boolean status, Pageable pageable){
     	 if (status == null) {
     		 status= true;    		
     	 } 
-   
+  
     	 Page<Adicional> page = adicionalRepository.findByStatus(status, pageable);
     	 Page<AdicionalDto> adicionaisDto = page.map(pagedto -> adicionalMapper.toAdicionalDto(pagedto));
     	 return adicionaisDto;

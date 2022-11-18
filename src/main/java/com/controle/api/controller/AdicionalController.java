@@ -3,6 +3,7 @@ package com.controle.api.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +26,6 @@ import com.controle.api.dto.AdicionalInputDto;
 import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
-import com.controle.api.repository.AdicionalRepository;
 import com.controle.api.service.AdicionalService;
 
 import io.swagger.annotations.Api;
@@ -80,9 +80,12 @@ public class AdicionalController {
     @DeleteMapping("/{id}")
     public ResponseEntity<AdicionalDto> deleta(@PathVariable(value = "id") Long id){
     		Adicional adicional =adicionalService.findById(id);  		
-    		adicionalService.excluir(adicional);
-    		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		
-    	
+    		try {
+    			adicionalService.excluir(adicional);
+    			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		
+    		} catch(DataIntegrityViolationException e){
+    			throw new EntidadeEmUsoException("Adicional está em uso , só pode ser desativado");
+    		}    		
     }
     
 

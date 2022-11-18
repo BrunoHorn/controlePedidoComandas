@@ -56,6 +56,11 @@ public class ProdutoService {
 		Page<ProdutoDto> produtoDto = page.map(pagedto -> produtoMapper.toProdutoDto(pagedto));
 		return produtoDto;
 	}
+
+	public void excluir(Produto produto) {
+		produtoRepository.delete(produto); 
+		
+	}
 	
 	
 	
