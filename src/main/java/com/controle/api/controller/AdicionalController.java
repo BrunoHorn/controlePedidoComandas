@@ -3,7 +3,6 @@ package com.controle.api.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
-import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
 import com.controle.api.service.AdicionalService;
@@ -65,27 +63,22 @@ public class AdicionalController {
       
     @GetMapping("/{id}")
     @ApiOperation(value="Busca adicional cadastrado pelo ID")
-    public ResponseEntity<AdicionalDto> getAdicionalid(@PathVariable(value = "id") Long id){
+    public ResponseEntity<AdicionalDto> getAdicionalid(@PathVariable(value = "id") Long id) throws Exception{
     	Adicional adicional =adicionalService.findById(id);   	
         return ResponseEntity.status(HttpStatus.OK).body(adicionalMapper.toAdicionalDto(adicional));
     }
     
     @PutMapping("/{id}")
     @ApiOperation(value="Atualiza adicional cadastrado pelo ID")
-    public ResponseEntity<AdicionalDto> updateAdicional(@PathVariable(value = "id")Long id,@RequestBody @Valid AdicionalInputDto adicionalDto){
+    public ResponseEntity<AdicionalDto> updateAdicional(@PathVariable(value = "id")Long id,@RequestBody @Valid AdicionalInputDto adicionalDto) throws Exception{
         Adicional adicionalUpdate = adicionalService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(adicionalService.save(adicionalDto, adicionalUpdate.getId()));
     }
        
     @DeleteMapping("/{id}")
-    public ResponseEntity<AdicionalDto> deleta(@PathVariable(value = "id") Long id){
-    		Adicional adicional =adicionalService.findById(id);  		
-    		try {
-    			adicionalService.excluir(adicional);
-    			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		
-    		} catch(DataIntegrityViolationException e){
-    			throw new EntidadeEmUsoException("Adicional está em uso , só pode ser desativado");
-    		}    		
+    public ResponseEntity<AdicionalDto> deleta(@PathVariable(value = "id") Long id) throws Exception{   			
+    			adicionalService.excluir(id);
+    			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		   		
     }
     
 

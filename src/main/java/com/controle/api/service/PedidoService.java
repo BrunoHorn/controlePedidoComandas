@@ -8,6 +8,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import com.controle.api.dto.PedidoretornoStatusDto;
 import com.controle.api.dto.ProdutoretornoPedidoDto;
 import com.controle.api.dto.PrudutoAdcPedidoDto;
 import com.controle.api.enumerado.StatusPedido;
+import com.controle.api.exception.EntidadeEmUsoException;
+import com.controle.api.exception.EntidadeNaoEncontradaException;
 import com.controle.api.mapper.PedidoMapper;
 import com.controle.api.model.Comanda;
 import com.controle.api.model.Pedido;
@@ -86,7 +89,7 @@ public class PedidoService {
 	public Pedido findById(Long id) {
 		var pedidoOptional =pedidoRepository.findById(id);
 		if (pedidoOptional.isEmpty()) {
-			throw new RuntimeException("Não a pedidos cadastrados com esse ID");
+			throw new EntidadeNaoEncontradaException("Não a pedidos cadastrados com esse ID");
 		}
 		return pedidoOptional.get();
 	}
@@ -127,10 +130,14 @@ public class PedidoService {
 	 return pedidosDto;
 	}
 
-	public void excluir(Pedido pedido) {
-	 	pedidoRepository.delete(pedido);
-		
-	}
+	public void excluir(Long id) {
+		try { 	
+			var pedido = findById(id);
+			pedidoRepository.delete(pedido);     
+		} catch(DataIntegrityViolationException e){
+		throw new EntidadeEmUsoException("Pedido está em uso , só pode ser desativado");
+		}
+    }
 
 
 	

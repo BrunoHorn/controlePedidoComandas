@@ -2,12 +2,18 @@ package com.controle.api.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
 import com.controle.api.dto.AdcPedidoRetornoDto;
 import com.controle.api.dto.AdicionalPedidoInputDto;
 import com.controle.api.dto.AdicionalPedidoRetornoDto;
+import com.controle.api.exception.EntidadeEmUsoException;
+import com.controle.api.exception.EntidadeNaoEncontradaException;
 import com.controle.api.model.AdicionalPedido;
 import com.controle.api.model.Pedido;
 import com.controle.api.model.Produto;
@@ -31,12 +37,12 @@ public class AdicionalPedidoService {
 	
 	
 	
-	public List<AdicionalPedidoRetornoDto> save(@Valid AdicionalPedidoInputDto AdcPedidoInputDto, Long id) {		
+	public List<AdicionalPedidoRetornoDto> save(@Valid AdicionalPedidoInputDto AdcPedidoInputDto, Long id) throws Exception {		
 		var produto = produtoService.findById(AdcPedidoInputDto.getProdutoId());
      	var pedido = pedidoRepository.findById(AdcPedidoInputDto.getPedidoId());        	
      	
 		if(!produto.getStatus()) {
-			throw new RuntimeException("Produto solicitadado está indisponivel!");
+			throw new EntidadeNaoEncontradaException("Produto solicitadado está indisponivel!");
 		}
      	    	
      	List<AdicionalPedido> adicionalPedidoList = new ArrayList<>();	
@@ -86,10 +92,19 @@ public class AdicionalPedidoService {
 		return adicionalPedidoOptional.get();
 	}
 
-	public void excluir(AdicionalPedido adicionalPedido) {
-		adicionalPedidoRepository.delete(adicionalPedido); 
+	public void excluir(Long id) {
+		try { 	
+			var adicionalPedido = findById(id);
+			adicionalPedidoRepository.delete(adicionalPedido);     
+		} catch(DataIntegrityViolationException e){
+		throw new EntidadeEmUsoException("AdicionalPedido está em uso , só pode ser desativado");
+		}
+    }
 		
-	}
+		
+
+		
+	
 
 }
 

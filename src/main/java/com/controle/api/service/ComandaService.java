@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import com.controle.api.dto.ComandaDto;
 import com.controle.api.dto.ComandaInputDto;
 import com.controle.api.dto.ComandaencerradaDto;
+import com.controle.api.exception.EntidadeEmUsoException;
+import com.controle.api.exception.EntidadeNaoEncontradaException;
 import com.controle.api.mapper.ComandaMapper;
 import com.controle.api.model.Comanda;
 import com.controle.api.repository.ComandaRepository;
@@ -42,7 +44,7 @@ public class ComandaService {
 	public Comanda findById(Long id) {
 		var comandaOptional = comandaRepository.findById(id);
 		if(comandaOptional.isEmpty()) {
-			throw new RuntimeException("Não a Comanda cadastrada com esse ID");
+			throw new EntidadeNaoEncontradaException("Não a Comanda cadastrada com esse ID");
 		}
 		return comandaOptional.get();
 	}
@@ -91,11 +93,15 @@ public class ComandaService {
    	 	Page<ComandaDto> comandasDto = page.map(pagedto -> comandaMapper.toComandaDto(pagedto));
    	 	return comandasDto;
    }
-    @Transactional
     
-	public void excluir(Comanda comanda) {
-    	comandaRepository.delete(comanda);
-	}
+	public void excluir(Long id) {
+		try { 	
+			var comanda = findById(id);
+			comandaRepository.delete(comanda);     
+		} catch(DataIntegrityViolationException e){
+		throw new EntidadeEmUsoException("Comanda está em uso , só pode ser desativada");
+		}
+    }
 
 
 

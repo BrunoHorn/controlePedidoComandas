@@ -3,7 +3,6 @@ package com.controle.api.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.controle.api.dto.ProdutoDto;
 import com.controle.api.dto.ProdutoInputDto;
-import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.mapper.ProdutoMapper;
 import com.controle.api.model.Produto;
 import com.controle.api.service.ProdutoService;
@@ -74,13 +72,7 @@ public class ProdutoController {
     
     @DeleteMapping("/{id}")
     public ResponseEntity<ProdutoDto> deleta(@PathVariable(value = "id") Long id){
-    		Produto produto =produtoService.findById(id);  		
-    		try {
-    			produtoService.excluir(produto);
-    			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		
-    		} catch(DataIntegrityViolationException e){
-    			throw new EntidadeEmUsoException("Produto está em uso , só pode ser desativado");
-    		}    		
+		produtoService.excluir(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   	
     }
-	
 }

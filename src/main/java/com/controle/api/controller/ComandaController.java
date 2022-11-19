@@ -3,7 +3,6 @@ package com.controle.api.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.controle.api.dto.ComandaDto;
 import com.controle.api.dto.ComandaInputDto;
-import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.mapper.ComandaMapper;
 import com.controle.api.model.Comanda;
 import com.controle.api.service.ComandaService;
@@ -66,13 +64,8 @@ public class ComandaController {
     @DeleteMapping("/{id}")
     @ApiOperation(value="Deleta comanda pelo id")
     public ResponseEntity<ComandaDto> deleta(@PathVariable(value = "id") Long id){
-    	Comanda comanda =comandaService.findById(id);  		
-		try {
-			comandaService.excluir(comanda);
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		
-		} catch(DataIntegrityViolationException e){
-			throw new EntidadeEmUsoException("Comanda está em uso , só pode ser desativada");
-		}  
+		comandaService.excluir(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   	 
     }
     
     @GetMapping

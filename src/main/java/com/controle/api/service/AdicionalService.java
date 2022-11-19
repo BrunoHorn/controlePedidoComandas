@@ -2,16 +2,18 @@ package com.controle.api.service;
 
 import java.util.Objects;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
+import com.controle.api.exception.EntidadeEmUsoException;
+import com.controle.api.exception.EntidadeNaoEncontradaException;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
 import com.controle.api.repository.AdicionalRepository;
@@ -45,19 +47,24 @@ public class AdicionalService {
 	}
 
 
-	public Adicional findById(Long id) {
+	public Adicional findById(Long id) throws Exception {
 		var adicionalOptional = adicionalRepository.findById(id);
-		if(adicionalOptional.isEmpty()) {
-			throw new RuntimeException("Não a adicionais cadastrados com esse ID");
+		
+		if(adicionalOptional.isEmpty()) {			
+			throw new EntidadeNaoEncontradaException("Não a adicionais cadastrados com esse ID");
 		}
 		return adicionalOptional.get();
 	}
 	
-    @Transactional
-	public void excluir(Adicional adicional) {
-    	adicionalRepository.delete(adicional); 
+	public void excluir(Long id) throws Exception {
+		try { 	
+			var adicional = findById(id);
+			adicionalRepository.delete(adicional);     
+		} catch(DataIntegrityViolationException e){
+		throw new EntidadeEmUsoException("Adicional está em uso , só pode ser desativado");
+		}
     }
-       
+        
     public Page<AdicionalDto> buscaListaAdicional(Boolean status, Pageable pageable){
     	 if (status == null) {
     		 status= true;    		
