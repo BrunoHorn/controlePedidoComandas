@@ -2,10 +2,14 @@ package com.controle.api.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.controle.api.enumerado.TipoDeProduto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +35,8 @@ public class Produto {
 	private String obeservacao;
 	
 	@Column(name="tipo") //ENUMARADO
-	private String tipo;
+	@Enumerated(EnumType.STRING)
+	private TipoDeProduto tipo;
 	
 	@Column(name="valor")
 	private Double valor;
