@@ -19,7 +19,7 @@ public class ProdutoDto {
 
 	private String obeservacao;
 
-	private TipoDeProduto tipo;
+	//private TipoDeProduto tipo;
 
 	private Double valor;
 

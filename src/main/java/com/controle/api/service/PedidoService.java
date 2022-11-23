@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
@@ -139,7 +141,46 @@ public class PedidoService {
 		}
     }
 
+	public List<Object> buscaPedidosCozinhao() {
+		List<Object> pedidosCozinha= pedidoRepository.findAllPreparoPedidos();
+		
+		
+		if (pedidosCozinha.isEmpty()){
+			System.out.println("teste");
+		}
+		
+		
+		
+		return pedidosCozinha;
+	}
 
+	
+	
+
+	
+	
+	/* public List<PedidoCozinhaDto> montaRetornoCozinhaListDto(List<Object> pedido){
+		 	List<PedidoCozinhaDto> PedidoCozinhaListDto = new ArrayList<>();
+		 	
+		
+		 	
+		 	
+		 	
+		 	for (Object pd : pedido) { 
+		 		PedidoCozinhaDto pedidoCozinhaDto = new PedidoCozinhaDto();
+		 		pedidoCozinhaDto.setProdutoId(null);
+		 		pedidoCozinhaDto.setNomeProduto(null);
+		 		pedidoCozinhaDto.setObservacaoProduto(null);
+		 		pedidoCozinhaDto.setDataPedido(null);
+		 		
+		 		 
+		 		 
+		 	 }
+		 
+		 
+		 return null;
+	 }
+*/
 	
 
      

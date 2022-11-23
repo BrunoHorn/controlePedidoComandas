@@ -2,10 +2,12 @@ package com.controle.api.mapper;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
 import com.controle.api.dto.PrudutoAdcPedidoDto;
 import com.controle.api.model.Pedido;
+import com.controle.api.model.PedidoCozinha;
 
 @Component
 public class PedidoMapper {
@@ -30,6 +32,14 @@ public class PedidoMapper {
 		pedidoDto.setProduto(prudutoAdcPedidoDto);
 		 return pedidoDto;
 	}
+	
+	public PedidoCozinha toPedidoCozinha(Object pedidoCozinhaInput) {
+		var pedidoCozinha = new PedidoCozinha();
+		 BeanUtils.copyProperties(pedidoCozinhaInput, pedidoCozinha); 
+		 return pedidoCozinha;
+	}
 
 
+	
+	
 }

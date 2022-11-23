@@ -1,5 +1,7 @@
 package com.controle.api.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,4 +84,17 @@ public class PedidoController {
 		pedidoService.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   	
     }
+    
+	@GetMapping("/cozinha")	    
+	public ResponseEntity<List<Object>> getPedidosCozinha(){
+			
+        List<Object> listaPedidoCozinha = pedidoService.buscaPedidosCozinhao();
+       
+        return ResponseEntity.status(HttpStatus.OK).body(listaPedidoCozinha);
+	}
+    
+    
+    
+    
+    
 }

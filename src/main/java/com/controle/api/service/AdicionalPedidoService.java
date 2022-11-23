@@ -39,7 +39,8 @@ public class AdicionalPedidoService {
 	
 	public List<AdicionalPedidoRetornoDto> save(@Valid AdicionalPedidoInputDto AdcPedidoInputDto, Long id) throws Exception {		
 		var produto = produtoService.findById(AdcPedidoInputDto.getProdutoId());
-     	var pedido = pedidoRepository.findById(AdcPedidoInputDto.getPedidoId());        	
+     	
+		var pedido = pedidoRepository.findById(AdcPedidoInputDto.getPedidoId());        	
      	
 		if(!produto.getStatus()) {
 			throw new EntidadeNaoEncontradaException("Produto solicitadado está indisponivel!");
