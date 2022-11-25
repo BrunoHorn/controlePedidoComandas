@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.controle.api.dto.PedidoCozinhaDto;
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
 import com.controle.api.enumerado.StatusPedido;
@@ -86,9 +87,9 @@ public class PedidoController {
     }
     
 	@GetMapping("/cozinha")	    
-	public ResponseEntity<List<Object>> getPedidosCozinha(){
+	public ResponseEntity<List<PedidoCozinhaDto>> getPedidosCozinha(){
 			
-        List<Object> listaPedidoCozinha = pedidoService.buscaPedidosCozinhao();
+        List<PedidoCozinhaDto> listaPedidoCozinha = pedidoService.buscaPedidosCozinhao();
        
         return ResponseEntity.status(HttpStatus.OK).body(listaPedidoCozinha);
 	}

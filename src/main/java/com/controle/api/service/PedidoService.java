@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
+import com.controle.api.dto.PedidoCozinhaDto;
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
 import com.controle.api.dto.PedidoretornoStatusDto;
@@ -27,11 +26,7 @@ import com.controle.api.mapper.PedidoMapper;
 import com.controle.api.model.Comanda;
 import com.controle.api.model.Pedido;
 import com.controle.api.model.Produto;
-import com.controle.api.repository.ComandaRepository;
 import com.controle.api.repository.PedidoRepository;
-import com.controle.api.repository.ProdutoRepository;
-
-
 
 @Service
 public class PedidoService {
@@ -43,32 +38,25 @@ public class PedidoService {
 	private PedidoRepository pedidoRepository;
 	
 	@Autowired
-	private ProdutoRepository produtoRepository ;
+	private ProdutoService ProdutoService;
 	
 	@Autowired
-	private ComandaRepository comandaRepository;
-	
+	private ComandaService comandaService;
+	 		
 	public PedidoDto save(@Valid PedidoInputDto pedidoInputDto, Long id) {
 		var pedido = pedidoMapper.toPedido(pedidoInputDto); 
-		var produto = produtoRepository.findById(pedidoInputDto.getProdutoId());        	
-		var comanda = comandaRepository.findById(pedidoInputDto.getComandaId());
-		
-		if(!produto.get().getStatus()) {
-			throw new RuntimeException("Produto :"+ produto.get().getNome()+ "  está indisponivel!");
-		}
-		if(!comanda.get().getStatus()) {
-			throw new RuntimeException("comanda está indisponivel!");
-		}
-				
+		var produto = ProdutoService.findById(pedidoInputDto.getProdutoId());//arrumar        	
+		var comanda = comandaService.findById(pedidoInputDto.getComandaId());//arrumar
+						
 		if (Objects.nonNull(id)) {
         	pedido.setId(id);
         }	
 		     pedido.setDataAtualizacao(LocalDateTime.now());   
-		     pedido.setComanda(comanda.get()); 
-		     pedido.setProduto(produto.get());
+		     pedido.setComanda(comanda); 
+		     pedido.setProduto(produto);
 		     pedidoRepository.save(pedido);		
 		     
-		PedidoDto pedidoDto = montaRetornoPedidoDto(pedido,produto.get(),comanda.get());		
+		PedidoDto pedidoDto = montaRetornoPedidoDto(pedido,produto,comanda);		
 	return pedidoDto;
 	}
 	
@@ -89,9 +77,9 @@ public class PedidoService {
 	}
 
 	public Pedido findById(Long id) {
-		var pedidoOptional =pedidoRepository.findById(id);
+		var pedidoOptional = pedidoRepository.findById(id);
 		if (pedidoOptional.isEmpty()) {
-			throw new EntidadeNaoEncontradaException("Não a pedidos cadastrados com esse ID");
+			throw new EntidadeNaoEncontradaException("Não a pedidos cadastrados com esse ID");//arrumar
 		}
 		return pedidoOptional.get();
 	}
@@ -100,26 +88,21 @@ public class PedidoService {
      	pedido.setStatus(statusPedido);
      	pedidoRepository.save(pedido);
      }
-	
 
-     
      public List<PedidoretornoStatusDto> montaRetornoPedidoListDto(List<Pedido> pedido) {
     	 List<PedidoretornoStatusDto> pedidoListDto = new ArrayList<>();
     	 
     	 for (Pedido pd : pedido) {
     		 PedidoretornoStatusDto pedidoDto= new PedidoretornoStatusDto();
-    		 ProdutoretornoPedidoDto pdtRetornopdd = new ProdutoretornoPedidoDto();
+    		 ProdutoretornoPedidoDto produtoretornoPedidoDto = new ProdutoretornoPedidoDto();
     		 
     		 pedidoDto.setPedidoId(pd.getId());
     		 pedidoDto.setObservacao(pd.getObservacao());
     		 pedidoDto.setDataPedido(pd.getDataAtualizacao());
-    		 pedidoDto.setComandaId(pd.getComanda().getId());
-    		 
-    		 pdtRetornopdd.setId(pd.getProduto().getId());
-    		 pdtRetornopdd.setNome(pd.getProduto().getNome());
-    		
-    		 pedidoDto.setProduto(pdtRetornopdd);
-    		 
+    		 pedidoDto.setComandaId(pd.getComanda().getId());    		 
+    		 produtoretornoPedidoDto.setId(pd.getProduto().getId());
+    		 produtoretornoPedidoDto.setNome(pd.getProduto().getNome());    		
+    		 pedidoDto.setProduto(produtoretornoPedidoDto);    		 
     		 pedidoListDto.add(pedidoDto);
     	 }
     	 return pedidoListDto;
@@ -127,9 +110,9 @@ public class PedidoService {
      }
 
 	public Page<PedidoDto> buscaListaPedido(StatusPedido status, Pageable pageable) {
-	 Page<Pedido> page = pedidoRepository.findByStatus(status, pageable);
-	 Page<PedidoDto> pedidosDto = page.map(pagedto -> pedidoMapper.toPedidoDto(pagedto));
-	 return pedidosDto;
+		Page<Pedido> page = pedidoRepository.findByStatus(status, pageable);
+		Page<PedidoDto> pedidosDto = page.map(pagedto -> pedidoMapper.toPedidoDto(pagedto));
+		return pedidosDto;
 	}
 
 	public void excluir(Long id) {
@@ -137,52 +120,16 @@ public class PedidoService {
 			var pedido = findById(id);
 			pedidoRepository.delete(pedido);     
 		} catch(DataIntegrityViolationException e){
-		throw new EntidadeEmUsoException("Pedido está em uso , só pode ser desativado");
+			throw new EntidadeEmUsoException("Pedido está em uso , só pode ser desativado");
 		}
     }
 
-	public List<Object> buscaPedidosCozinhao() {
-		List<Object> pedidosCozinha= pedidoRepository.findAllPreparoPedidos();
-		
-		
-		if (pedidosCozinha.isEmpty()){
-			System.out.println("teste");
-		}
-		
-		
-		
-		return pedidosCozinha;
-	}
-
-	
-	
-
-	
-	
-	/* public List<PedidoCozinhaDto> montaRetornoCozinhaListDto(List<Object> pedido){
-		 	List<PedidoCozinhaDto> PedidoCozinhaListDto = new ArrayList<>();
-		 	
-		
-		 	
-		 	
-		 	
-		 	for (Object pd : pedido) { 
-		 		PedidoCozinhaDto pedidoCozinhaDto = new PedidoCozinhaDto();
-		 		pedidoCozinhaDto.setProdutoId(null);
-		 		pedidoCozinhaDto.setNomeProduto(null);
-		 		pedidoCozinhaDto.setObservacaoProduto(null);
-		 		pedidoCozinhaDto.setDataPedido(null);
-		 		
-		 		 
-		 		 
-		 	 }
-		 
-		 
-		 return null;
-	 }
-*/
-	
-
-     
-
+	public List<PedidoCozinhaDto> buscaPedidosCozinhao() {
+		List<Pedido> pedidosLista= pedidoRepository.findAllPreparoPedidos();				
+		List<PedidoCozinhaDto> pedidoCozinhaDtoList = new ArrayList<>();
+		for (Pedido pedido : pedidosLista ) {						
+			pedidoCozinhaDtoList.add(pedidoMapper.toPedidoCozinhaDto(pedido, pedido.getProduto()));
+		}		
+		return pedidoCozinhaDtoList;
+	}    
 }

@@ -49,11 +49,10 @@ public class ComandaService {
 		return comandaOptional.get();
 	}
 
-
 	public ComandaDto trocaStatusComanda(@Valid ComandaencerradaDto comandaencerradaDto, Long id) {
 		var comandaOptional = comandaRepository.findById(id);
 		if(comandaOptional.isEmpty()) {
-			throw new RuntimeException("Não a Comanda cadastrada com esse ID");
+			throw new EntidadeNaoEncontradaException("Não há Comanda cadastrada com esse ID");
 		}
 		var comanda = comandaOptional.get();
 			comanda.setStatus(comandaencerradaDto.getStatusComanda());
@@ -99,7 +98,7 @@ public class ComandaService {
 			var comanda = findById(id);
 			comandaRepository.delete(comanda);     
 		} catch(DataIntegrityViolationException e){
-		throw new EntidadeEmUsoException("Comanda está em uso , só pode ser desativada");
+			throw new EntidadeEmUsoException("Comanda está em uso , só pode ser desativada");
 		}
     }
 

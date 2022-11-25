@@ -14,6 +14,7 @@ import com.controle.api.dto.AdicionalPedidoInputDto;
 import com.controle.api.dto.AdicionalPedidoRetornoDto;
 import com.controle.api.exception.EntidadeEmUsoException;
 import com.controle.api.exception.EntidadeNaoEncontradaException;
+import com.controle.api.exception.NegocioException;
 import com.controle.api.model.AdicionalPedido;
 import com.controle.api.model.Pedido;
 import com.controle.api.model.Produto;
@@ -34,9 +35,7 @@ public class AdicionalPedidoService {
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
-	
-	
-	
+
 	public List<AdicionalPedidoRetornoDto> save(@Valid AdicionalPedidoInputDto AdcPedidoInputDto, Long id) throws Exception {		
 		var produto = produtoService.findById(AdcPedidoInputDto.getProdutoId());
      	
@@ -52,7 +51,7 @@ public class AdicionalPedidoService {
 			var adicionalPedido = new AdicionalPedido();
 			var adicional =adicionalService.findById(adcId);
 			if(!adicional.getStatus()) {
-				throw new RuntimeException("Adicional :"+ adicional.getNome()+ "  está indisponivel!");
+				throw new NegocioException("Adicional :"+ adicional.getNome()+ "  está indisponivel!");
 			}			
 			adicionalPedido.setAdicional(adicional);
 			adicionalPedido.setProduto(produto);
@@ -61,17 +60,17 @@ public class AdicionalPedidoService {
 			
 			adicionalPedidoList.add(adicionalPedidoRepository.save(adicionalPedido));
 		}
-		List<AdicionalPedidoRetornoDto> adcPedidoRetornoDto =new ArrayList<>(); 		       		
-				
-				adcPedidoRetornoDto  = MontaDtoadcPedidoRetorno(adicionalPedidoList,produto,pedido.get());	
-	return adcPedidoRetornoDto;
+		List<AdicionalPedidoRetornoDto> adcPedidoRetornoDto =new ArrayList<>(); 		       						
+		adcPedidoRetornoDto  = MontaDtoadcPedidoRetorno(adicionalPedidoList,produto,pedido.get());	
+		
+		return adcPedidoRetornoDto;
 	}
 	
 	private List<AdicionalPedidoRetornoDto> MontaDtoadcPedidoRetorno(List<AdicionalPedido> adicionalPedidoList,Produto produto,Pedido pedido) {
 		List<AdicionalPedidoRetornoDto> AdicionalPedidoRetornoListDto= new ArrayList<>();	
 		
 		for(AdicionalPedido adicionalPedido:adicionalPedidoList ) {
-			var adicionalPedidoRetornoDto =new AdicionalPedidoRetornoDto();				
+			var adicionalPedidoRetornoDto = new AdicionalPedidoRetornoDto();				
 			adicionalPedidoRetornoDto.setId(adicionalPedido.getId());
 			 
 			var AdcPedidoRetornoDto = new AdcPedidoRetornoDto();			
@@ -80,15 +79,14 @@ public class AdicionalPedidoService {
 			adicionalPedidoRetornoDto.setProdutoId(produto.getId());
 		
 			AdicionalPedidoRetornoListDto.add(adicionalPedidoRetornoDto);
-		}
-		
+		}		
 		return AdicionalPedidoRetornoListDto;
 	}
 
 	public AdicionalPedido findById(Long id) {
 		var adicionalPedidoOptional = adicionalPedidoRepository.findById(id);
 		if(adicionalPedidoOptional.isEmpty()) {
-			throw new RuntimeException("Não a adicionaisPedidos cadastrados com esse ID");
+			throw new EntidadeNaoEncontradaException("Não há adicionaisPedidos cadastrados com esse ID");
 		}
 		return adicionalPedidoOptional.get();
 	}
@@ -98,15 +96,10 @@ public class AdicionalPedidoService {
 			var adicionalPedido = findById(id);
 			adicionalPedidoRepository.delete(adicionalPedido);     
 		} catch(DataIntegrityViolationException e){
-		throw new EntidadeEmUsoException("AdicionalPedido está em uso , só pode ser desativado");
+			throw new EntidadeEmUsoException("AdicionalPedido está em uso , só pode ser desativado");
 		}
     }
 		
-		
-
-		
-	
-
 }
 
 

@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
 	            new ExceptionDto(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage())
 	        );
 	    }
-	   
+	   	   
 	   @ExceptionHandler(EntidadeNaoEncontradaException.class)
 	    public ResponseEntity<ExceptionDto> EntidadeNaoEncontradaException(EntidadeNaoEncontradaException e){
 
@@ -33,6 +33,4 @@ public class GlobalExceptionHandler {
 	            new ExceptionDto(HttpStatus.NOT_FOUND, e.getMessage())
 	        );
 	    }
-
-
 }

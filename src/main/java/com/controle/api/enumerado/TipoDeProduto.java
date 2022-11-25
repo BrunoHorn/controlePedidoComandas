@@ -2,7 +2,7 @@ package com.controle.api.enumerado;
 
 public enum TipoDeProduto {
 
-	PORÇÃO,
+	PORCAO,
 	HAMBURGUER,
 	REFRIGERANTE,
 	SUCO,

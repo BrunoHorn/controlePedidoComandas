@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class PedidoCozinhaDto {
 	
-	private Long produtoId;
+	private Long comandaId;
 	
 	private String nomeProduto;
 	

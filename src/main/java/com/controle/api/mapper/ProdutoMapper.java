@@ -30,11 +30,9 @@ public class ProdutoMapper {
 			var produtoDto = new ProdutoDto();
 			produtoDto.setId(pr.getId());
 			produtoDto.setNome(pr.getNome());
-			produtoDto.setObeservacao(pr.getObeservacao());
-		//	produtoDto.setTipo(pr.getTipo());
+			produtoDto.setObeservacao(pr.getObeservacao());			
 			produtoDto.setValor(pr.getValor());
-			produtoDto.setStatus(pr.getStatus());
-			
+			produtoDto.setStatus(pr.getStatus());		
 			produtoListDto.add(produtoDto);
 		}				 
 		 return produtoListDto;
