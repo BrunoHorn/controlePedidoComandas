@@ -1,5 +1,7 @@
 package com.controle.api.dto;
 
+import com.controle.api.enumerado.TipoDeProduto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,8 @@ public class ProdutoDto {
 
 	private String obeservacao;
 
+	private TipoDeProduto tipo;
+	
 	private Double valor;
 
 	private Boolean status;

@@ -31,6 +31,7 @@ public class ProdutoMapper {
 			produtoDto.setId(pr.getId());
 			produtoDto.setNome(pr.getNome());
 			produtoDto.setObeservacao(pr.getObeservacao());			
+			produtoDto.setTipo(pr.getTipo());
 			produtoDto.setValor(pr.getValor());
 			produtoDto.setStatus(pr.getStatus());		
 			produtoListDto.add(produtoDto);

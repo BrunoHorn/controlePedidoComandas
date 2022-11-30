@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.controle.api.enumerado.StatusPedido;
 import com.controle.api.model.Pedido;
 
-
-
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	

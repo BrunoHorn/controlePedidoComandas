@@ -57,7 +57,6 @@ public class PedidoController {
         return ResponseEntity.status(HttpStatus.OK).body(pedidoMapper.toPedidoDto(pedido));
     }
 	
-
     @PutMapping("/{id}")
     @ApiOperation(value="Atualiza pedido status pelo ID")
 	public ResponseEntity<PedidoDto> alteraStatusPedido(@PathVariable(value = "id")Long id,StatusPedido statusPedido){
@@ -87,8 +86,7 @@ public class PedidoController {
     }
     
 	@GetMapping("/cozinha")	    
-	public ResponseEntity<List<PedidoCozinhaDto>> getPedidosCozinha(){
-			
+	public ResponseEntity<List<PedidoCozinhaDto>> getPedidosCozinha(){			
         List<PedidoCozinhaDto> listaPedidoCozinha = pedidoService.buscaPedidosCozinhao();
        
         return ResponseEntity.status(HttpStatus.OK).body(listaPedidoCozinha);
