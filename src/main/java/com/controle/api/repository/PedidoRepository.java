@@ -15,11 +15,16 @@ import com.controle.api.model.Pedido;
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	
 	Page<Pedido> findByStatus(StatusPedido status, Pageable pageable);
-			
+	
+	List<Pedido> findAllPedidoByStatusAndComandaId(StatusPedido Status, Long comandaId);
+		
 	@Query(value = "select * from pedido p"
 			+ " where p.status = 'REALIZADO' "
 			+ " order by p.data_atualizacao  asc", nativeQuery = true)
 	List<Pedido>findAllPreparoPedidos();
 	
+
+	
+
 
 }

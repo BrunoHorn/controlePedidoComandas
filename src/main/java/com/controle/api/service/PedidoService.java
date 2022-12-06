@@ -45,8 +45,8 @@ public class PedidoService {
 	 		
 	public PedidoDto save(@Valid PedidoInputDto pedidoInputDto, Long id) {
 		var pedido = pedidoMapper.toPedido(pedidoInputDto); 
-		var produto = ProdutoService.findById(pedidoInputDto.getProdutoId());//arrumar        	
-		var comanda = comandaService.findById(pedidoInputDto.getComandaId());//arrumar
+		var produto = ProdutoService.findById(pedidoInputDto.getProdutoId());
+		var comanda = comandaService.findById(pedidoInputDto.getComandaId());
 						
 		if (Objects.nonNull(id)) {
         	pedido.setId(id);
