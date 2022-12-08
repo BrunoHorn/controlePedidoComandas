@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.controle.api.enumerado.StatusPedido;
+import com.controle.api.dto.PagamentoComandaDto;
 import com.controle.api.model.Pedido;
-import com.controle.api.repository.PedidoRepository;
-import com.controle.api.service.ComandaService;
+import com.controle.api.service.PagamentoService;
 
 import io.swagger.annotations.Api;
 
@@ -22,19 +21,16 @@ import io.swagger.annotations.Api;
 @RequestMapping("/Pagamento")
 @Api(value="API controle de Pagamento")
 public class PagamentoController {
-	
+		
 	@Autowired
-	ComandaService comandaService;
-	
-	@Autowired
-	PedidoRepository pedidoRepository;
+	PagamentoService pagamentoService;
 	
 	@GetMapping("/{id}")	    
-	public ResponseEntity<List<Pedido>> getPedidosPagamento(Long id) {
-		var comanda = comandaService.findById(id);
-		 List<Pedido> pedidosLista = pedidoRepository.findAllPedidoByStatusAndComandaId(StatusPedido.ATENDIDO, comanda.getId());
-
-        return ResponseEntity.status(HttpStatus.OK).body(pedidosLista);
+	public ResponseEntity<PagamentoComandaDto> getPedidosPagamento(Long id) {		
+		 List<Pedido> pedidosLista = pagamentoService.buscaComandaParaPagamento(id);
+		 PagamentoComandaDto pagamentoComandaDto = new PagamentoComandaDto();
+		 pagamentoComandaDto = pagamentoService.montaRetornoPagamentoComandaDto(pedidosLista, id);
+        return ResponseEntity.status(HttpStatus.OK).body(pagamentoComandaDto);
 	}
 	
 }
