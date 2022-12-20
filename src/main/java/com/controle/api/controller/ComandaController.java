@@ -24,7 +24,7 @@ import com.controle.api.dto.ComandaDto;
 import com.controle.api.dto.ComandaInputDto;
 import com.controle.api.mapper.ComandaMapper;
 import com.controle.api.model.Comanda;
-import com.controle.api.service.ComandaService;
+import com.controle.api.service.Impl.ComandaServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiOperation;
 public class ComandaController {
 	
 	@Autowired
-	private ComandaService comandaService;
+	private ComandaServiceImpl comandaServiceImpl;
 	
 	@Autowired
 	private ComandaMapper comandaMapper;
@@ -44,27 +44,27 @@ public class ComandaController {
 	@PostMapping
 	@ApiOperation(value="Cadastrar nova comanda")
     public ResponseEntity<ComandaDto> saveComanda(@RequestBody @Valid ComandaInputDto comandaInputDto){		
-        return ResponseEntity.status(HttpStatus.CREATED).body(comandaService.save(comandaInputDto, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(comandaServiceImpl.save(comandaInputDto, null));
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value="Busca comandas cadastrado pelo ID")
     public ResponseEntity<ComandaDto> getComandaId(@PathVariable(value = "id") Long id){
-    	Comanda comanda =comandaService.findById(id);   	
+    	Comanda comanda =comandaServiceImpl.findById(id);   	
         return ResponseEntity.status(HttpStatus.OK).body(comandaMapper.toComandaDto(comanda));
     }
     
     @PutMapping("/{id}")
     @ApiOperation(value="Atualiza comanda cadastrado pelo ID")
     public ResponseEntity<ComandaDto> updateComanda(@PathVariable(value = "id")Long id,@RequestBody @Valid ComandaInputDto comandaInputDto){
-        Comanda comandaUpdate = comandaService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(comandaService.save(comandaInputDto, comandaUpdate.getId()));
+        Comanda comandaUpdate = comandaServiceImpl.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(comandaServiceImpl.save(comandaInputDto, comandaUpdate.getId()));
     } 
     
     @DeleteMapping("/{id}")
     @ApiOperation(value="Deleta comanda pelo id")
     public ResponseEntity<ComandaDto> deleta(@PathVariable(value = "id") Long id){
-		comandaService.excluir(id);
+		comandaServiceImpl.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   	 
     }
     
@@ -72,7 +72,7 @@ public class ComandaController {
     public ResponseEntity<Page<ComandaDto>> getListComandas(@RequestParam(required = false) Boolean status,
     		@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC)Pageable pageable	){
         
-        Page<ComandaDto> listaComandaDto = comandaService.buscaListaComanda(status, pageable);        
+        Page<ComandaDto> listaComandaDto = comandaServiceImpl.buscaListaComanda(status, pageable);        
         return ResponseEntity.status(HttpStatus.OK).body(listaComandaDto);                
     }
     

@@ -1,4 +1,4 @@
-package com.controle.api.service;
+package com.controle.api.service.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +14,17 @@ import com.controle.api.model.Pedido;
 import com.controle.api.repository.PedidoRepository;
 
 @Service
-public class PagamentoService {
+public class PagamentoServiceImpl {
 
 	@Autowired
-	ComandaService comandaService;
+	ComandaServiceImpl comandaServiceImpl;
 	@Autowired
 	PagamentoMapper pagamentoMapper;
 	
 	@Autowired
 	PedidoRepository pedidoRepository;
 	public List<Pedido> buscaComandaParaPagamento(Long id) {
-		var comanda = comandaService.findById(id);
+		var comanda = comandaServiceImpl.findById(id);
 		 List<Pedido> pedidosLista = pedidoRepository.findAllPedidoByStatusAndComandaId(StatusPedido.ATENDIDO, comanda.getId());
 		
 		 		 
@@ -32,7 +32,7 @@ public class PagamentoService {
 	}
 
 	public PagamentoComandaDto montaRetornoPagamentoComandaDto(List<Pedido> pedidos,Long id) {
-		var comanda = comandaService.findById(id);
+		var comanda = comandaServiceImpl.findById(id);
 		PagamentoComandaDto pagamentoComandaDto = new PagamentoComandaDto();
 		List<PagamentoProdutoDto>pagamentoProdutoDto = new ArrayList<>();
 		pagamentoComandaDto.setComandaId(comanda.getId());

@@ -1,4 +1,4 @@
-package com.controle.api.service;
+package com.controle.api.service.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,22 +22,22 @@ import com.controle.api.repository.AdicionalPedidoRepository;
 import com.controle.api.repository.PedidoRepository;
 
 @Service
-public class AdicionalPedidoService {
+public class AdicionalPedidoServiceImpl {
 
 	@Autowired
 	private AdicionalPedidoRepository adicionalPedidoRepository;
 		
 	@Autowired
-	private ProdutoService  produtoService;
+	private ProdutoServiceImpl  produtoServiceImpl;
 	
 	@Autowired
-	private AdicionalService adicionalService;
+	private AdicionalServiceImpl adicionalServiceImpl;
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
 	public List<AdicionalPedidoRetornoDto> save(@Valid AdicionalPedidoInputDto AdcPedidoInputDto, Long id) throws Exception {		
-		var produto = produtoService.findById(AdcPedidoInputDto.getProdutoId());
+		var produto = produtoServiceImpl.findById(AdcPedidoInputDto.getProdutoId());
      	
 		var pedido = pedidoRepository.findById(AdcPedidoInputDto.getPedidoId());        	
      	
@@ -49,7 +49,7 @@ public class AdicionalPedidoService {
      	List<Long> ids= AdcPedidoInputDto.getAdicionalId();
 		for (Long adcId :ids){
 			var adicionalPedido = new AdicionalPedido();
-			var adicional =adicionalService.findById(adcId);
+			var adicional =adicionalServiceImpl.findById(adcId);
 			if(!adicional.getStatus()) {
 				throw new NegocioException("Adicional :"+ adicional.getNome()+ "  está indisponivel!");
 			}			

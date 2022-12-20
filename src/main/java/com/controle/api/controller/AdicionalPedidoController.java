@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.controle.api.dto.AdicionalPedidoDto;
 import com.controle.api.dto.AdicionalPedidoInputDto;
 import com.controle.api.dto.AdicionalPedidoRetornoDto;
-import com.controle.api.service.AdicionalPedidoService;
+import com.controle.api.service.Impl.AdicionalPedidoServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,18 +30,18 @@ import io.swagger.annotations.ApiOperation;
 public class AdicionalPedidoController { 
 	
 	@Autowired
-    private AdicionalPedidoService adicionalPedidoService;
+    private AdicionalPedidoServiceImpl adicionalPedidoServiceImpl;
 	
 	@PostMapping
 	@ApiOperation(value="Cadastrar novo adicional em um pedido ")
     public ResponseEntity<List<AdicionalPedidoRetornoDto>> saveAdcProduto(@RequestBody @Valid AdicionalPedidoInputDto adicionalPedidoInputDto) throws Exception{		
-        return ResponseEntity.status(HttpStatus.CREATED).body(adicionalPedidoService.save(adicionalPedidoInputDto, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adicionalPedidoServiceImpl.save(adicionalPedidoInputDto, null));
     }
 
 	
     @DeleteMapping("/{id}")
     public ResponseEntity<AdicionalPedidoDto> deleta(@PathVariable(value = "id") Long id){
-		adicionalPedidoService.excluir(id);
+		adicionalPedidoServiceImpl.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		
     }
 }

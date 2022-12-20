@@ -24,7 +24,7 @@ import com.controle.api.dto.AdicionalDto;
 import com.controle.api.dto.AdicionalInputDto;
 import com.controle.api.mapper.AdicionalMapper;
 import com.controle.api.model.Adicional;
-import com.controle.api.service.AdicionalService;
+import com.controle.api.service.Impl.AdicionalServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,26 +36,22 @@ import io.swagger.annotations.ApiOperation;
 public class AdicionalController {
 	
 	@Autowired
-    private AdicionalService adicionalService;
+    private AdicionalServiceImpl adicionalServiceImpl;
 	
 	@Autowired
 	private AdicionalMapper adicionalMapper;
-	
-	//@Autowired
-	//private AdicionalRepository adicionalRepository;
-	
-	
+		
 	@PostMapping
 	@ApiOperation(value="Cadastrar novo adicional")
     public ResponseEntity<AdicionalDto> saveAdicional(@RequestBody @Valid AdicionalInputDto adicionalInputDto){		
-        return ResponseEntity.status(HttpStatus.CREATED).body(adicionalService.save(adicionalInputDto, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adicionalServiceImpl.save(adicionalInputDto, null));
     }
     @GetMapping
     @ApiOperation(value="Busca lista de adicionais cadastrados")
     public ResponseEntity<Page<AdicionalDto>> getListAdicionais(@RequestParam(required = false) Boolean status,
     		@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC)Pageable pageable	){
         
-        Page<AdicionalDto> listaAdicionaisDto = adicionalService.buscaListaAdicional(status, pageable);
+        Page<AdicionalDto> listaAdicionaisDto = adicionalServiceImpl.buscaListaAdicional(status, pageable);
         
         return ResponseEntity.status(HttpStatus.OK).body(listaAdicionaisDto);
                 
@@ -64,20 +60,20 @@ public class AdicionalController {
     @GetMapping("/{id}")
     @ApiOperation(value="Busca adicional cadastrado pelo ID")
     public ResponseEntity<AdicionalDto> getAdicionalid(@PathVariable(value = "id") Long id) throws Exception{
-    	Adicional adicional =adicionalService.findById(id);   	
+    	Adicional adicional =adicionalServiceImpl.findById(id);   	
         return ResponseEntity.status(HttpStatus.OK).body(adicionalMapper.toAdicionalDto(adicional));
     }
     
     @PutMapping("/{id}")
     @ApiOperation(value="Atualiza adicional cadastrado pelo ID")
     public ResponseEntity<AdicionalDto> updateAdicional(@PathVariable(value = "id")Long id,@RequestBody @Valid AdicionalInputDto adicionalDto) throws Exception{
-        Adicional adicionalUpdate = adicionalService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(adicionalService.save(adicionalDto, adicionalUpdate.getId()));
+        Adicional adicionalUpdate = adicionalServiceImpl.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(adicionalServiceImpl.save(adicionalDto, adicionalUpdate.getId()));
     }
        
     @DeleteMapping("/{id}")
     public ResponseEntity<AdicionalDto> deleta(@PathVariable(value = "id") Long id) throws Exception{   			
-    			adicionalService.excluir(id);
+    			adicionalServiceImpl.excluir(id);
     			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   		 		   		
     }
     

@@ -1,4 +1,4 @@
-package com.controle.api.service;
+package com.controle.api.service.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import com.controle.api.model.Comanda;
 import com.controle.api.repository.ComandaRepository;
 
 @Service
-public class ComandaService {
+public class ComandaServiceImpl {
 
 	@Autowired
 	private ComandaMapper comandaMapper;

@@ -24,7 +24,7 @@ import com.controle.api.dto.ProdutoDto;
 import com.controle.api.dto.ProdutoInputDto;
 import com.controle.api.mapper.ProdutoMapper;
 import com.controle.api.model.Produto;
-import com.controle.api.service.ProdutoService;
+import com.controle.api.service.Impl.ProdutoServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiOperation;
 public class ProdutoController {
 	  
 	@Autowired
-	private ProdutoService produtoService;
+	private ProdutoServiceImpl produtoServiceImpl;
 	
 	@Autowired
 	private ProdutoMapper produtoMapper;
@@ -44,14 +44,14 @@ public class ProdutoController {
 	@PostMapping
 	@ApiOperation(value="Cadastrar novo produto")
     public ResponseEntity<ProdutoDto> saveProduto(@RequestBody @Valid ProdutoInputDto produtoInputDto){		
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.save(produtoInputDto, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoServiceImpl.save(produtoInputDto, null));
     }
    
     @GetMapping
     public ResponseEntity<Page<ProdutoDto>> getListProduto(@RequestParam(required = false) Boolean status,
     		@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC)Pageable pageable	){
         
-        Page<ProdutoDto> listaProdutoDto = produtoService.buscaListaproduto(status, pageable);
+        Page<ProdutoDto> listaProdutoDto = produtoServiceImpl.buscaListaproduto(status, pageable);
         
         return ResponseEntity.status(HttpStatus.OK).body(listaProdutoDto);               
     }
@@ -59,20 +59,20 @@ public class ProdutoController {
     @GetMapping("/{id}")
     @ApiOperation(value="Busca produto cadastrado pelo ID")
     public ResponseEntity<ProdutoDto> getProdutoId(@PathVariable(value = "id") Long id){
-    	Produto produto =produtoService.findById(id);   	
+    	Produto produto =produtoServiceImpl.findById(id);   	
         return ResponseEntity.status(HttpStatus.OK).body(produtoMapper.toProdutoDto(produto));
     }
     
     @PutMapping("/{id}")
     @ApiOperation(value="Atualiza Produto cadastrado pelo ID")
     public ResponseEntity<ProdutoDto> updateProduto(@PathVariable(value = "id")Long id,@RequestBody @Valid ProdutoInputDto produtoDto){
-        Produto produtoUpdate = produtoService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(produtoService.save(produtoDto, produtoUpdate.getId()));
+        Produto produtoUpdate = produtoServiceImpl.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(produtoServiceImpl.save(produtoDto, produtoUpdate.getId()));
     }
     
     @DeleteMapping("/{id}")
     public ResponseEntity<ProdutoDto> deleta(@PathVariable(value = "id") Long id){
-		produtoService.excluir(id);
+		produtoServiceImpl.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   	
     }
 }

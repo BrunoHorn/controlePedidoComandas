@@ -28,7 +28,7 @@ import com.controle.api.dto.PedidoInputDto;
 import com.controle.api.enumerado.StatusPedido;
 import com.controle.api.mapper.PedidoMapper;
 import com.controle.api.model.Pedido;
-import com.controle.api.service.PedidoService;
+import com.controle.api.service.Impl.PedidoServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
 public class PedidoController {
 	
 	@Autowired
-	private PedidoService pedidoService;
+	private PedidoServiceImpl pedidoServiceImpl;
 	
 	@Autowired
 	private PedidoMapper pedidoMapper;
@@ -46,26 +46,26 @@ public class PedidoController {
 	@PostMapping
 	@ApiOperation(value="Cadastrar novo pedido")
     public ResponseEntity<PedidoDto> savePedido(@RequestBody @Valid PedidoInputDto pedidoInputDto){		
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.save(pedidoInputDto, null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoServiceImpl.save(pedidoInputDto, null));
     }
 	
 	
     @GetMapping("/{id}")
     @ApiOperation(value="Busca produto cadastrado pelo ID")
     public ResponseEntity<PedidoDto> getPedidoId(@PathVariable(value = "id") Long id){
-    	var pedido =pedidoService.findById(id);   	
+    	var pedido =pedidoServiceImpl.findById(id);   	
         return ResponseEntity.status(HttpStatus.OK).body(pedidoMapper.toPedidoDto(pedido));
     }
 	
     @PutMapping("/{id}")
     @ApiOperation(value="Atualiza pedido status pelo ID")
 	public ResponseEntity<PedidoDto> alteraStatusPedido(@PathVariable(value = "id")Long id,StatusPedido statusPedido){
-    	Pedido pedidoUpdate = pedidoService.findById(id);
+    	Pedido pedidoUpdate = pedidoServiceImpl.findById(id);
     	var produto = pedidoUpdate.getProduto();
     	var comanda =pedidoUpdate.getComanda();
-    	pedidoService.alteraStatuspedido(pedidoUpdate, statusPedido);
+    	pedidoServiceImpl.alteraStatuspedido(pedidoUpdate, statusPedido);
     	
-    	var pedidoDto = pedidoService.montaRetornoPedidoDto(pedidoUpdate, produto, comanda);
+    	var pedidoDto = pedidoServiceImpl.montaRetornoPedidoDto(pedidoUpdate, produto, comanda);
     	
 		return ResponseEntity.status(HttpStatus.OK).body(pedidoDto);
 	}
@@ -74,20 +74,20 @@ public class PedidoController {
 	public ResponseEntity<Page<PedidoDto>> getStatusDePedidos(@RequestParam(required = false) StatusPedido status,
     		@PageableDefault(page = 0, size = 2, sort = "id", direction = Sort.Direction.DESC)Pageable pageable){
 			
-        Page<PedidoDto> listaPedidoDto = pedidoService.buscaListaPedido(status, pageable);
+        Page<PedidoDto> listaPedidoDto = pedidoServiceImpl.buscaListaPedido(status, pageable);
        
         return ResponseEntity.status(HttpStatus.OK).body(listaPedidoDto);
 	}
 	
     @DeleteMapping("/{id}")
     public ResponseEntity<PedidoDto> deleta(@PathVariable(value = "id") Long id){
-		pedidoService.excluir(id);
+		pedidoServiceImpl.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();   	
     }
     
 	@GetMapping("/cozinha")	    
 	public ResponseEntity<List<PedidoCozinhaDto>> getPedidosCozinha(){			
-        List<PedidoCozinhaDto> listaPedidoCozinha = pedidoService.buscaPedidosCozinhao();
+        List<PedidoCozinhaDto> listaPedidoCozinha = pedidoServiceImpl.buscaPedidosCozinhao();
        
         return ResponseEntity.status(HttpStatus.OK).body(listaPedidoCozinha);
 	}

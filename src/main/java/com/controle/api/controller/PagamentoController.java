@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.controle.api.dto.PagamentoComandaDto;
 import com.controle.api.model.Pedido;
-import com.controle.api.service.PagamentoService;
+import com.controle.api.service.Impl.PagamentoServiceImpl;
 
 import io.swagger.annotations.Api;
 
@@ -23,13 +23,13 @@ import io.swagger.annotations.Api;
 public class PagamentoController {
 		
 	@Autowired
-	PagamentoService pagamentoService;
+	PagamentoServiceImpl pagamentoServiceImpl;
 	
 	@GetMapping("/{id}")	    
 	public ResponseEntity<PagamentoComandaDto> getPedidosPagamento(Long id) {		
-		 List<Pedido> pedidosLista = pagamentoService.buscaComandaParaPagamento(id);
+		 List<Pedido> pedidosLista = pagamentoServiceImpl.buscaComandaParaPagamento(id);
 		 PagamentoComandaDto pagamentoComandaDto = new PagamentoComandaDto();
-		 pagamentoComandaDto = pagamentoService.montaRetornoPagamentoComandaDto(pedidosLista, id);
+		 pagamentoComandaDto = pagamentoServiceImpl.montaRetornoPagamentoComandaDto(pedidosLista, id);
         return ResponseEntity.status(HttpStatus.OK).body(pagamentoComandaDto);
 	}
 	

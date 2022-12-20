@@ -1,4 +1,4 @@
-package com.controle.api.service;
+package com.controle.api.service.Impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import com.controle.api.model.Produto;
 import com.controle.api.repository.PedidoRepository;
 
 @Service
-public class PedidoService {
+public class PedidoServiceImpl {
 
 	@Autowired
 	private PedidoMapper pedidoMapper;
@@ -38,15 +38,15 @@ public class PedidoService {
 	private PedidoRepository pedidoRepository;
 	
 	@Autowired
-	private ProdutoService ProdutoService;
+	private ProdutoServiceImpl ProdutoServiceImpl;
 	
 	@Autowired
-	private ComandaService comandaService;
+	private ComandaServiceImpl comandaServiceImpl;
 	 		
 	public PedidoDto save(@Valid PedidoInputDto pedidoInputDto, Long id) {
 		var pedido = pedidoMapper.toPedido(pedidoInputDto); 
-		var produto = ProdutoService.findById(pedidoInputDto.getProdutoId());
-		var comanda = comandaService.findById(pedidoInputDto.getComandaId());
+		var produto = ProdutoServiceImpl.findById(pedidoInputDto.getProdutoId());
+		var comanda = comandaServiceImpl.findById(pedidoInputDto.getComandaId());
 						
 		if (Objects.nonNull(id)) {
         	pedido.setId(id);
