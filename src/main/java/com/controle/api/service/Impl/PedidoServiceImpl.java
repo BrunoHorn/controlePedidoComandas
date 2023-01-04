@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import com.controle.api.dto.PedidoCozinhaDto;
 import com.controle.api.dto.PedidoDto;
 import com.controle.api.dto.PedidoInputDto;
-import com.controle.api.dto.PedidoretornoStatusDto;
-import com.controle.api.dto.ProdutoretornoPedidoDto;
 import com.controle.api.dto.PrudutoAdcPedidoDto;
 import com.controle.api.enumerado.StatusPedido;
 import com.controle.api.exception.EntidadeEmUsoException;
@@ -27,9 +25,10 @@ import com.controle.api.model.Comanda;
 import com.controle.api.model.Pedido;
 import com.controle.api.model.Produto;
 import com.controle.api.repository.PedidoRepository;
+import com.controle.api.service.PedidoService;
 
 @Service
-public class PedidoServiceImpl {
+public class PedidoServiceImpl implements PedidoService {
 
 	@Autowired
 	private PedidoMapper pedidoMapper;
@@ -42,7 +41,8 @@ public class PedidoServiceImpl {
 	
 	@Autowired
 	private ComandaServiceImpl comandaServiceImpl;
-	 		
+	 
+	@Override
 	public PedidoDto save(@Valid PedidoInputDto pedidoInputDto, Long id) {
 		var pedido = pedidoMapper.toPedido(pedidoInputDto); 
 		var produto = ProdutoServiceImpl.findById(pedidoInputDto.getProdutoId());
@@ -60,6 +60,7 @@ public class PedidoServiceImpl {
 	return pedidoDto;
 	}
 	
+	@Override
 	public PedidoDto montaRetornoPedidoDto(Pedido pedido,Produto produto,Comanda comanda) {
 		PedidoDto pedidoDto = new PedidoDto();
 		PrudutoAdcPedidoDto prudutoAdcPedidoDto = new PrudutoAdcPedidoDto();
@@ -76,6 +77,7 @@ public class PedidoServiceImpl {
 		return pedidoDto;
 	}
 
+	@Override
 	public Pedido findById(Long id) {
 		var pedidoOptional = pedidoRepository.findById(id);
 		if (pedidoOptional.isEmpty()) {
@@ -84,12 +86,13 @@ public class PedidoServiceImpl {
 		return pedidoOptional.get();
 	}
 	
+	@Override
      public  void alteraStatuspedido (Pedido pedido, StatusPedido statusPedido) {    	
      	pedido.setStatus(statusPedido);
      	pedidoRepository.save(pedido);
      }
 
-     public List<PedidoretornoStatusDto> montaRetornoPedidoListDto(List<Pedido> pedido) {
+   /*  private List<PedidoretornoStatusDto> montaRetornoPedidoListDto(List<Pedido> pedido) {
     	 List<PedidoretornoStatusDto> pedidoListDto = new ArrayList<>();
     	 
     	 for (Pedido pd : pedido) {
@@ -108,13 +111,15 @@ public class PedidoServiceImpl {
     	 return pedidoListDto;
     	 
      }
-
+*/
+    @Override
 	public Page<PedidoDto> buscaListaPedido(StatusPedido status, Pageable pageable) {
 		Page<Pedido> page = pedidoRepository.findByStatus(status, pageable);
 		Page<PedidoDto> pedidosDto = page.map(pagedto -> pedidoMapper.toPedidoDto(pagedto));
 		return pedidosDto;
 	}
 
+    @Override
 	public void excluir(Long id) {
 		try { 	
 			var pedido = findById(id);
@@ -124,6 +129,7 @@ public class PedidoServiceImpl {
 		}
     }
 
+    @Override
 	public List<PedidoCozinhaDto> buscaPedidosCozinhao() {
 		List<Pedido> pedidosLista= pedidoRepository.findAllPreparoPedidos();				
 		List<PedidoCozinhaDto> pedidoCozinhaDtoList = new ArrayList<>();
